@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cw_proj/widgets/weather_card.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -28,8 +29,17 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
 
-      body: Container(
-
+      body: PageView.custom(
+        childrenDelegate: SliverChildBuilderDelegate(
+          (context, index){
+            return Center(
+              child: WeatherInfo(
+                
+              ),
+            );
+          },
+          childCount: 10,
+        ),
       ),
     );
   }
