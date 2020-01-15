@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cw_proj/widgets/weather_card.dart';
+import 'package:cw_proj/widgets/JCustomIndicator.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -7,6 +8,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  PageController _pageController = PageController(initialPage: 2);
+  final int _pageCount = 5;
+  int _initialPage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,18 +34,46 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
 
-      body: PageView.custom(
-        childrenDelegate: SliverChildBuilderDelegate(
-          (context, index){
-            return Center(
-              child: WeatherInfo(
-                
-              ),
-            );
-          },
-          childCount: 10,
+      body: PageView.builder(
+        onPageChanged: onPageChanged,
+        controller: _pageController,
+        itemBuilder: (context, index){
+          return Center(
+            child: WeatherInfo(),
+          );
+        },
+        itemCount: _pageCount,
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Theme.of(context).primaryColor,
+          primaryColor: Theme.of(context).accentColor,
         ),
+        child: Container(
+          height: 100,
+          child: JCustomIndicator(controller: _pageController,itemCount: 5,),
+        )
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _pageController.dispose();
+  }
+
+
+  void onPageChanged(int index){
+    setState(() {});
+  }
+
+  void setPageCount(int count){
+
   }
 }
