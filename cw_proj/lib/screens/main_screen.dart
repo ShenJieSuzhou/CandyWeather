@@ -8,8 +8,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  PageController _pageController = PageController(initialPage: 2);
-  final int _pageCount = 5;
+  PageController _pageController = PageController(initialPage: 0);
+  int _pageCount;
   int _initialPage;
 
   @override
@@ -74,6 +74,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void setPageCount(int count){
+    this._pageCount = count;
+  }
 
+  void setInitialPage(int initPage){
+    this._initialPage = initPage;
   }
 }
