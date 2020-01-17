@@ -60,6 +60,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
+    // 加载配置文件
+
+    // 请求网络数据
+    
   }
 
   @override
