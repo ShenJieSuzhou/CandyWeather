@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  grouped_list: ^1.2.1
   flutter:
     sdk: flutter
 
@@ -53,6 +54,11 @@ flutter:
     - assets/cm9.jpeg
     - assets/cm0.jpeg
     - assets/Config/Locations.json
+
+  fonts:
+    - family: iconfont
+      fonts:
+        - asset: fonts/iconfont.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cw_proj/screens/conversation.dart';
+
 
 
 class ChatItem extends StatefulWidget {
@@ -105,7 +105,7 @@ class _ChatItemState extends State<ChatItem> {
           Navigator.of(context, rootNavigator: true).push(
             MaterialPageRoute(
               builder: (BuildContext context){
-                return Conversation();
+                return SizedBox();
               }
             )
           );

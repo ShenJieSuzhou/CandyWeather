@@ -1,18 +1,19 @@
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:cw_proj/Model/city.dart';
+import 'package:cw_proj/Model/SelLocations.dart';
 
-Future<String> _loadCityJson() async{
-  return await rootBundle.loadString('assets/Config/Locations.json');
+Future<SelLocations> fetchCity() async{
+  final result =  await rootBundle.loadString('assets/Config/Locations.json');
+  return SelLocations.fromJson(json.decode(result));
 }
 
-Future<City> decodeCity() async{
-  String cityJson = await _loadCityJson();
+// Future<SelLocations> fetchMyCity() async{ 
+  // String cityJson = await _loadCityJson();
 
-  final jsonMap = json.decode(cityJson);
+  // Map<String, dynamic> jsonMap = json.decode(cityJson);
+  
+  // SelLocations citys = SelLocations.fromJson(jsonMap);
 
-  City city = City.formJson(jsonMap);
-
-  return city;
-}
+//   return null;
+// }

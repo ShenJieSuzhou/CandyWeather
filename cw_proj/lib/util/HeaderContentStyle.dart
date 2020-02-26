@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Constants{
-
-  static String appName = "Soical App";
-
+class HeaderContentStyle{
   //Colors of theme
   static Color lightPrimary = Color(0xfffcfcff);
   static Color darkPrimary = Colors.black;
@@ -19,13 +16,6 @@ class Constants{
     accentColor: lightAccent,
     cursorColor: lightAccent,
     scaffoldBackgroundColor: lightBG,
-    textTheme: TextTheme(
-      title: TextStyle(
-          color: darkBG,
-          fontSize: 18.0,
-          fontWeight: FontWeight.w800,
-        )
-    ),
     appBarTheme: AppBarTheme(
       elevation: 0,
       textTheme: TextTheme(
@@ -44,19 +34,12 @@ class Constants{
     primaryColor: darkPrimary,
     accentColor: darkAccent,
     scaffoldBackgroundColor: darkBG,
-    textTheme: TextTheme(
-      title: TextStyle(
-          color: darkBG,
-          fontSize: 18.0,
-          fontWeight: FontWeight.w800,
-        )
-    ),
     cursorColor: darkAccent,
     appBarTheme: AppBarTheme(
       elevation: 0,
       textTheme: TextTheme(
         title: TextStyle(
-          color: darkBG,
+          color: lightBG,
           fontSize: 18.0,
           fontWeight: FontWeight.w800,
         )
@@ -64,9 +47,15 @@ class Constants{
     )
   );
 
-  static const cityTextStyle = TextStyle(
-    color: Colors.white,
+  static const dateStyle = TextStyle(
+    color: Colors.black,
     fontSize: 18,
+    fontWeight: FontWeight.bold
+  );
+
+  static const today = TextStyle(
+    color: Colors.black,
+    fontSize: 40,
     fontWeight: FontWeight.bold
   );
 }
