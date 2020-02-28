@@ -144,7 +144,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
                 height: 20.0,
               ),
               Container(
-                child: futureWeather(280.0),
+                child: futureWeather(220.0),
               )
             ],
           ),
