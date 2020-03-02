@@ -125,7 +125,7 @@ class _MainScreenState extends State<MainScreen> {
         body: Material(
           child: Stack(
             children: <Widget>[
-              SpriteWidget(weatherWorld),
+              // SpriteWidget(weatherWorld),
               Column(
                 children: <Widget>[
                   Container(
@@ -152,10 +152,10 @@ class _MainScreenState extends State<MainScreen> {
                       itemCount: _pageCount,
                     ),
                   ),
-                  Container(
-                    height: bottomHeight,
-                    child: JCustomIndicator(controller: _pageController,itemCount: 5,),
-                  ),
+                  // Container(
+                  //   height: bottomHeight,
+                  //   child: JCustomIndicator(controller: _pageController,itemCount: 5,),
+                  // ),
               ],
             ),
           ],

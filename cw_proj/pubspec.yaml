@@ -19,6 +19,8 @@ environment:
 dependencies:
   grouped_list: ^1.2.1
   spritewidget:
+  common_utils:
+  flustars:
   flutter:
     sdk: flutter
 
@@ -59,6 +61,9 @@ flutter:
     - family: iconfont
       fonts:
         - asset: fonts/iconfont.ttf
+  # assets:
+  #  - images/a_dot_burr.jpeg
+  #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
