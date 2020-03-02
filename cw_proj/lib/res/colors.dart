@@ -8,7 +8,7 @@ class Colours {
   static const Color dark_bg_color = Color(0xFF18191A);
 
   static const Color material_bg = Color(0xFFFFFFFF);
-  static const Color dark_material_bg = Color(0xFF303233);
+  static const Color dark_material_bg = Color(0xFF1e1e20);
 
   static const Color text = Color(0xFF333333);
   static const Color dark_text = Color(0xFFB8B8B8);

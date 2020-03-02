@@ -68,6 +68,8 @@ class ThemeProvider extends ChangeNotifier {
         elevation: 0.0,
         color: isDarkMode ? Colours.dark_bg_color : Colors.white,
         brightness: isDarkMode ? Brightness.dark : Brightness.light,
+        iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colours.dark_bg_color),
+        actionsIconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colours.dark_bg_color),
       ),
       dividerTheme: DividerThemeData(
         color: isDarkMode ? Colours.dark_line : Colours.line,
