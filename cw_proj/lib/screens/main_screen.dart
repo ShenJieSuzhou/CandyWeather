@@ -1,16 +1,19 @@
+import 'dart:wasm';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui' as ui show Image;
 import 'package:flutter/services.dart';
 
 import 'package:cw_proj/widgets/weather_card.dart';
-import 'package:cw_proj/widgets/JCustomIndicator.dart';
 import 'package:cw_proj/Model/SelLocations.dart';
 import 'package:cw_proj/util/configFile.dart';
 import 'package:cw_proj/screens/city_screen.dart';
 import 'package:cw_proj/screens/setting_screen.dart';
 import 'package:cw_proj/widgets/HeaderContentView.dart';
 import 'package:spritewidget/spritewidget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cw_proj/util/theme_utils.dart';
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -57,13 +60,19 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final screenHeight = size.height;
-    final headerHeight = 120.0;
-    final bottomHeight = 50.0;
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
+    // ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
+    // ScreenUtil.init(context);
+    ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
+
+    // final size = MediaQuery.of(context).size;
+    // final screenHeight = size.height;
+    // final headerHeight = 100.0;
+    // final bottomHeight = 50.0;
+    // final double statusBarHeight = MediaQuery.of(context).padding.top;
+    bool isDark = ThemeUtils.isDark(context);
     
     AppBar appBar = AppBar(
+        backgroundColor: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
         elevation: 0.0,   
         leading: Builder(
           builder: (BuildContext context){
@@ -119,7 +128,6 @@ class _MainScreenState extends State<MainScreen> {
       );
 
     double appBarHeight = appBar.preferredSize.height;
-
     return Scaffold(
         appBar: appBar,
         body: Material(
@@ -129,29 +137,33 @@ class _MainScreenState extends State<MainScreen> {
               Column(
                 children: <Widget>[
                   Container(
-                    decoration: BoxDecoration(
-                      
-                    ),
-                    width: double.infinity,
-                    height: headerHeight,
+                    color: Colors.transparent,
+                    width: ScreenUtil.screenWidth,
+                    height: ScreenUtil().setHeight(180),
                     child: HeaderContentView()
                   ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
                   Container(
-                    decoration: BoxDecoration(
-                      
-                    ),
-                    height: screenHeight - headerHeight - appBarHeight - bottomHeight - statusBarHeight,
+                    color: Colors.transparent,
+                    width: ScreenUtil.screenWidth,
+                    height: ScreenUtil().setHeight(850),
                     child: PageView.builder(
                       onPageChanged: onPageChanged,
                       controller: _pageController,
                       itemBuilder: (context, index){
-                        return Container(
-                          child: WeatherInfo(),
-                        );
+                        return WeatherInfo();
                       },
                       itemCount: _pageCount,
                     ),
                   ),
+                  Align(
+                    alignment: FractionalOffset.center,
+                    child: IconButton(icon: Icon(Icons.arrow_upward), onPressed: (){
+                      
+                    },),
+                  )
                   // Container(
                   //   height: bottomHeight,
                   //   child: JCustomIndicator(controller: _pageController,itemCount: 5,),

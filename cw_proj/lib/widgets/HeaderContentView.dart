@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cw_proj/util/HeaderContentStyle.dart';
+import 'package:cw_proj/res/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HeaderContentView extends StatefulWidget {
   @override
@@ -14,17 +15,24 @@ class _HeaderContentViewState extends State<HeaderContentView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            height: 50.0,
-            padding: EdgeInsets.fromLTRB(30, 5, 0, 0),
-            child: Text("2月17日 星期一", 
-            style: HeaderContentStyle.dateStyle,
+            height: ScreenUtil().setHeight(80),
+            padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), ScreenUtil().setWidth(30), 0, 5),
+            child: Text("2020年2月17日 星期一", 
+            style: TextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(35),
+                    ),
             textAlign: TextAlign.start,),
           ),
           Container(
-            height: 70.0,
-            padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+            height: ScreenUtil().setHeight(100),
+            padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, 0, 5),
             child: Text("Today",
-            style: HeaderContentStyle.today,
+            style: TextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(80),
+                      fontWeight: FontWeight.bold
+                    ),
             textAlign: TextAlign.start,),
           ),
         ],
