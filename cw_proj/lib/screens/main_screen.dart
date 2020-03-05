@@ -37,6 +37,9 @@ class _MainScreenState extends State<MainScreen> {
 
   bool assetsLoaded = false;
   WeatherWorld weatherWorld;
+  AppBar _appBar;
+  bool showToTopBtn = false;
+  ScrollController _controller = new ScrollController();
 
   // 加载本项目所需的 assets.
   Future<Null> _loadAssets(AssetBundle bundle) async {
@@ -60,8 +63,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
-    // ScreenUtil.init(context);
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
 
     // final size = MediaQuery.of(context).size;
@@ -70,9 +71,123 @@ class _MainScreenState extends State<MainScreen> {
     // final bottomHeight = 50.0;
     // final double statusBarHeight = MediaQuery.of(context).padding.top;
     bool isDark = ThemeUtils.isDark(context);
+    // double appBarHeight = _appBar.preferredSize.height;
+    _appBar = createNaviBar();
+    return Scaffold(
+        appBar: _appBar,
+        body: Material(
+          child: Stack(
+            children: <Widget>[
+              // SpriteWidget(weatherWorld),
+              Scrollbar(
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                    color: Colors.transparent,
+                    width: ScreenUtil.screenWidth,
+                    height: ScreenUtil().setHeight(180),
+                    child: HeaderContentView()
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  Container(
+                    color: Colors.transparent,
+                    width: ScreenUtil.screenWidth,
+                    height: ScreenUtil().setHeight(850),
+                    child: PageView.builder(
+                      onPageChanged: onPageChanged,
+                      controller: _pageController,
+                      itemBuilder: (context, index){
+                        return WeatherInfo();
+                      },
+                      itemCount: _pageCount,
+                    ),
+                  ),
+                  Align(
+                    alignment: FractionalOffset.center,
+                    child: IconButton(icon: Icon(Icons.arrow_upward), onPressed: (){
+                      
+                    },),
+                  ),
+                  Container(
+                    height: 150.0,
+                    color: Colors.blue,
+                  ),
+                  Container(
+                    height: 150.0,
+                    color: Colors.blue,
+                  ),
+                  Container(
+                    height: 150.0,
+                    color: Colors.blue,
+                  ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ), 
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //监听滚动事件，打印滚动位置
+    _controller.addListener(() {
+      print(_controller.offset); //打印滚动位置
+      // if (_controller.offset < 1000 && showToTopBtn) {
+      //   setState(() {
+      //     showToTopBtn = false;
+      //   });
+      // } else if (_controller.offset >= 1000 && showToTopBtn == false) {
+      //   setState(() {
+      //     showToTopBtn = true;
+      //   });
+      // }
+    });
+ 
+    // 获取 rootbundle
+    AssetBundle bundle = rootBundle;
+    // 加载天气图形
+    _loadAssets(bundle).then((_){
+      setState(() {
+        assetsLoaded = true;
+        weatherWorld = new WeatherWorld();
+      });
+    });
+
+    // 加载配置文件
+    citys = fetchCity();
     
-    AppBar appBar = AppBar(
-        backgroundColor: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+    // 请求网络数据
+    // ...
+  }
+
+  @override
+  void dispose(){
+    _controller.dispose();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+
+  void onPageChanged(int index){
+    setState(() {});
+
+  }
+
+  void setPageCount(int count){
+    this._pageCount = count;
+  }
+
+  void setInitialPage(int initPage){
+    this._initialPage = initPage;
+  }
+
+  Widget createNaviBar(){
+    return AppBar(
         elevation: 0.0,   
         leading: Builder(
           builder: (BuildContext context){
@@ -126,105 +241,6 @@ class _MainScreenState extends State<MainScreen> {
           )
         ],
       );
-
-    double appBarHeight = appBar.preferredSize.height;
-    return Scaffold(
-        appBar: appBar,
-        body: Material(
-          child: Stack(
-            children: <Widget>[
-              // SpriteWidget(weatherWorld),
-              Column(
-                children: <Widget>[
-                  Container(
-                    color: Colors.transparent,
-                    width: ScreenUtil.screenWidth,
-                    height: ScreenUtil().setHeight(180),
-                    child: HeaderContentView()
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(10),
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    width: ScreenUtil.screenWidth,
-                    height: ScreenUtil().setHeight(850),
-                    child: PageView.builder(
-                      onPageChanged: onPageChanged,
-                      controller: _pageController,
-                      itemBuilder: (context, index){
-                        return WeatherInfo();
-                      },
-                      itemCount: _pageCount,
-                    ),
-                  ),
-                  Align(
-                    alignment: FractionalOffset.center,
-                    child: IconButton(icon: Icon(Icons.arrow_upward), onPressed: (){
-                      
-                    },),
-                  )
-                  // Container(
-                  //   height: bottomHeight,
-                  //   child: JCustomIndicator(controller: _pageController,itemCount: 5,),
-                  // ),
-              ],
-            ),
-          ],
-        ),
-      ), 
-      // drawer: SideMenuBar(),
-      // bottomNavigationBar: Theme(
-      //   data: Theme.of(context).copyWith(
-      //     canvasColor: Theme.of(context).primaryColor,
-      //     primaryColor: Theme.of(context).accentColor,
-      //   ),
-      //   child: Container(
-      //     height: bottomHeight,
-      //     child: JCustomIndicator(controller: _pageController,itemCount: 5,),
-      //   )
-      // ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // 获取 rootbundle
-    AssetBundle bundle = rootBundle;
-    // 加载天气图形
-    _loadAssets(bundle).then((_){
-      setState(() {
-        assetsLoaded = true;
-        weatherWorld = new WeatherWorld();
-      });
-    });
-
-    // 加载配置文件
-    citys = fetchCity();
-    
-    // 请求网络数据
-    // ...
-  }
-
-  @override
-  void dispose(){
-    super.dispose();
-    _pageController.dispose();
-  }
-
-
-  void onPageChanged(int index){
-    setState(() {});
-
-  }
-
-  void setPageCount(int count){
-    this._pageCount = count;
-  }
-
-  void setInitialPage(int initPage){
-    this._initialPage = initPage;
   }
 }
 

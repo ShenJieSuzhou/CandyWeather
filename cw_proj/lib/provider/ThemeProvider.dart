@@ -66,7 +66,7 @@ class ThemeProvider extends ChangeNotifier {
       ),
       appBarTheme: AppBarTheme(
         elevation: 0.0,
-        color: isDarkMode ? Colours.dark_bg_color : Colors.white,
+        color: isDarkMode ? Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
         brightness: isDarkMode ? Brightness.dark : Brightness.light,
         iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colours.dark_bg_color),
         actionsIconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colours.dark_bg_color),

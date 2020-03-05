@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cw_proj/res/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cw_proj/res/styles.dart';
-import 'package:cw_proj/res/colors.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class WeatherInfo extends StatefulWidget {
