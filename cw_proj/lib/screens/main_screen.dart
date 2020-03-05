@@ -65,14 +65,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
 
-    // final size = MediaQuery.of(context).size;
-    // final screenHeight = size.height;
+    final size = MediaQuery.of(context).size;
+    double screenHeight = size.height;
     // final headerHeight = 100.0;
     // final bottomHeight = 50.0;
-    // final double statusBarHeight = MediaQuery.of(context).padding.top;
+    double statusBarHeight = MediaQuery.of(context).padding.top;
     bool isDark = ThemeUtils.isDark(context);
-    // double appBarHeight = _appBar.preferredSize.height;
     _appBar = createNaviBar();
+    double appBarHeight = _appBar.preferredSize.height;
     return Scaffold(
         appBar: _appBar,
         body: Material(
@@ -83,45 +83,49 @@ class _MainScreenState extends State<MainScreen> {
                 child: ListView(
                   children: <Widget>[
                     Container(
-                    color: Colors.transparent,
-                    width: ScreenUtil.screenWidth,
-                    height: ScreenUtil().setHeight(180),
-                    child: HeaderContentView()
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(10),
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    width: ScreenUtil.screenWidth,
-                    height: ScreenUtil().setHeight(850),
-                    child: PageView.builder(
-                      onPageChanged: onPageChanged,
-                      controller: _pageController,
-                      itemBuilder: (context, index){
-                        return WeatherInfo();
-                      },
-                      itemCount: _pageCount,
+                      height: screenHeight - appBarHeight - statusBarHeight,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.transparent,
+                            width: ScreenUtil.screenWidth,
+                            height: ScreenUtil().setHeight(180),
+                            child: HeaderContentView()
+                          ),
+                          SizedBox(
+                            height: ScreenUtil().setHeight(10),
+                          ),
+                          Container(
+                            color: Colors.transparent,
+                            width: ScreenUtil.screenWidth,
+                            height: ScreenUtil().setHeight(950),
+                            child: PageView.builder(
+                              onPageChanged: onPageChanged,
+                              controller: _pageController,
+                              itemBuilder: (context, index){
+                                return WeatherInfo();
+                              },
+                              itemCount: _pageCount,
+                            ),
+                          ),
+                          SizedBox(
+                            height: ScreenUtil().setHeight(10),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: FractionalOffset.center,
-                    child: IconButton(icon: Icon(Icons.arrow_upward), onPressed: (){
-                      
-                    },),
-                  ),
-                  Container(
-                    height: 150.0,
-                    color: Colors.blue,
-                  ),
-                  Container(
-                    height: 150.0,
-                    color: Colors.blue,
-                  ),
-                  Container(
-                    height: 150.0,
-                    color: Colors.blue,
-                  ),
+                    Container(
+                      height: 150.0,
+                      color: Colors.blue,
+                    ),
+                    Container(
+                      height: 150.0,
+                      color: Colors.blue,
+                    ),
+                    Container(
+                      height: 150.0,
+                      color: Colors.blue,
+                    ),
                   ],
                 ),
               ),

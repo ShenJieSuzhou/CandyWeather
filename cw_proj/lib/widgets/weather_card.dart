@@ -30,7 +30,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
 
   Widget realTimeWeather(double width, bool isDark){
     return Padding(
-      padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), 0.0),
+      padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -59,30 +59,30 @@ class _WeatherInfoState extends State<WeatherInfo> {
             height: ScreenUtil().setWidth(20.0),
           ),
           Container(
-            width: width - 60,
             height: ScreenUtil().setHeight(50),
-            padding: EdgeInsets.fromLTRB(0, 0.0, 0, 0.0),
             child: Text("23°", 
                       style: TextStyle(
                       fontSize: ScreenUtil().setSp(50),
                     ),
                 )
           ),
+           SizedBox(
+            height: ScreenUtil().setWidth(20.0),
+          ),
           Container(
-            width: width - 60,
             height: ScreenUtil().setHeight(50),
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text("晴间多云", 
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(36),
+                      fontSize: ScreenUtil().setSp(40),
                     ),
                     ),
                 ),
                 Align(
                   alignment: FractionalOffset.centerRight,
-                  child: Icon(Icons.bookmark, size: ScreenUtil().setWidth(80), color: isDark? Colors.white : Colors.black,),
+                  child: Icon(Icons.bookmark, size: ScreenUtil().setWidth(60), color: isDark? Colors.white : Colors.black,),
                 ),
               ],
             )
@@ -107,6 +107,8 @@ class _WeatherInfoState extends State<WeatherInfo> {
       margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Container(
         decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
           image: DecorationImage(
             image: AssetImage('assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg'),
             fit: BoxFit.fitHeight
@@ -116,31 +118,38 @@ class _WeatherInfoState extends State<WeatherInfo> {
     );
   }
 
-  Widget colorTheSoulWords(double width, bool isDark){
+  Widget colorTheSoulWords(bool isDark){
     return Container(
       color: Colors.transparent,
-      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-      width: width - 40,
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
               Container(
                 width: 5.0,
-                height: ScreenUtil().setHeight(100),
+                height: ScreenUtil().setHeight(120),
                 color: Colors.black,
               ),
               SizedBox(
-                width: ScreenUtil().setWidth(10),
+                width: ScreenUtil().setWidth(20),
               ),
               Expanded(
                 //child: Text('上面代码中，我们通过TextSpan实现了一个基础文本片段和一个链接片段，然后通过Text.rich 方法'),
                 child: Column(
                   children: <Widget>[
-                    Text('上面代码中，我们通过TextSpan实现了一个基础文本片段和一个链接片段，然后通过Text.rich 方法'),
+                    Text('有许多事,在你还不懂得珍惜之前已成旧事。有许多事,在你还不懂得珍惜之前已成旧事。',
+                        style: TextStyle(
+                            fontSize: ScreenUtil().setSp(30),
+                          ),
+                    ),
                     Align(
                       alignment: FractionalOffset.centerRight,
-                      child: Text('- 匿名'),
+                      child: Text('- 匿名',
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(30),
+                          ),
+                        ),
                     )
                   ],
                 ),
@@ -150,34 +159,6 @@ class _WeatherInfoState extends State<WeatherInfo> {
           )
         ],
       ),
-      // child: Row(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   children: <Widget>[
-      //       // Container(
-      //       //   height: ScreenUtil().setHeight(150),
-      //       //   width: ScreenUtil().setWidth(10),
-      //       //   color: Color(0xFF31363c),
-      //       // ),
-      //       // SizedBox(
-      //       //   width: 10,
-      //       // ),
-      //       Column(
-      //         children: <Widget>[
-      //           Expanded(
-      //             child: RichText(
-      //               text: TextSpan(
-      //                 text: '有许多事,在你还不懂得珍惜之前已成旧事。有许多事,在你还不懂得珍惜之前已成旧事。',
-      //                 style: TextStyle(
-      //                   color: Colors.black,
-      //                 ),
-      //               ),
-      //             )
-      //           ),
-      //           Text('-匿名'),
-      //         ],
-      //       )
-      //     ],
-      // ),
     );
   }
 
@@ -214,26 +195,20 @@ class _WeatherInfoState extends State<WeatherInfo> {
          decoration: BoxDecoration(
            shape: BoxShape.rectangle,
            color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-           borderRadius: BorderRadius.all(Radius.circular(20)),
-          //  boxShadow: [
-          //   BoxShadow(color: Colors.grey[400],offset: Offset(1, 1),blurRadius: 5,),
-          //   BoxShadow(color: Colors.grey[300], offset: Offset(-1, -1), blurRadius: 5),
-          //   BoxShadow(color: Colors.grey[300], offset: Offset(1, -1), blurRadius: 5),
-          //   BoxShadow(color: Colors.grey[400], offset: Offset(-1, 1), blurRadius: 5,)
-          //   ]
+           borderRadius: BorderRadius.all(Radius.circular(10)),
          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                height: ScreenUtil().setHeight(280),
+                height: ScreenUtil().setHeight(310),
                 child: realTimeWeather(width, isDark),
               ),
               SizedBox(
                 height: ScreenUtil().setWidth(10),
               ),
               Container(
-                height: ScreenUtil().setHeight(350),
+                height: ScreenUtil().setHeight(420),
                 child: bingDeskPic(width),
               ),
               SizedBox(
@@ -241,8 +216,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
               ),
               Container(
                 height: ScreenUtil().setHeight(200),
-                child: colorTheSoulWords(width, isDark),
-                // color: Colors.white,
+                child: colorTheSoulWords(isDark),
               ),
             ],
           ),
