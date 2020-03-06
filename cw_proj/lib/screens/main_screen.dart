@@ -139,16 +139,6 @@ class _MainScreenState extends State<MainScreen> {
             children: <Widget>[
               // SpriteWidget(weatherWorld),
               Scrollbar(
-                child: NotificationListener(
-                  onNotification: (ScrollNotification notification){
-                    double offset = notification.metrics.pixels;
-                    // if(offset >= 100){
-                    //   _controller.animateTo(screenHeight - appBarHeight - statusBarHeight,
-                    //   duration: Duration(milliseconds: 200),
-                    //   curve: Curves.ease
-                    //   );
-                    // }else if()
-                  },
                   child: ListView.builder(
                   itemCount: 5,
                   controller: _controller,
@@ -211,7 +201,6 @@ class _MainScreenState extends State<MainScreen> {
 
                     );
                   }
-                ),
                 ),
               ),
           ],

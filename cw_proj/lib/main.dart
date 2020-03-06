@@ -1,4 +1,4 @@
-import 'package:cw_proj/provider/ThemeProvider.dart';
+import 'package:cw_proj/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cw_proj/screens/main_screen.dart';
