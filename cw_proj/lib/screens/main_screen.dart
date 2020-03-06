@@ -38,8 +38,9 @@ class _MainScreenState extends State<MainScreen> {
   bool assetsLoaded = false;
   WeatherWorld weatherWorld;
   AppBar _appBar;
-  bool showToTopBtn = false;
   ScrollController _controller = new ScrollController();
+  bool allowJumpTo = false;
+  double criticalH = 0.0;
 
   // 加载本项目所需的 assets.
   Future<Null> _loadAssets(AssetBundle bundle) async {
@@ -62,94 +63,23 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
-
-    final size = MediaQuery.of(context).size;
-    double screenHeight = size.height;
-    // final headerHeight = 100.0;
-    // final bottomHeight = 50.0;
-    double statusBarHeight = MediaQuery.of(context).padding.top;
-    bool isDark = ThemeUtils.isDark(context);
-    _appBar = createNaviBar();
-    double appBarHeight = _appBar.preferredSize.height;
-    return Scaffold(
-        appBar: _appBar,
-        body: Material(
-          child: Stack(
-            children: <Widget>[
-              // SpriteWidget(weatherWorld),
-              Scrollbar(
-                child: ListView(
-                  children: <Widget>[
-                    Container(
-                      height: screenHeight - appBarHeight - statusBarHeight,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.transparent,
-                            width: ScreenUtil.screenWidth,
-                            height: ScreenUtil().setHeight(180),
-                            child: HeaderContentView()
-                          ),
-                          SizedBox(
-                            height: ScreenUtil().setHeight(10),
-                          ),
-                          Container(
-                            color: Colors.transparent,
-                            width: ScreenUtil.screenWidth,
-                            height: ScreenUtil().setHeight(950),
-                            child: PageView.builder(
-                              onPageChanged: onPageChanged,
-                              controller: _pageController,
-                              itemBuilder: (context, index){
-                                return WeatherInfo();
-                              },
-                              itemCount: _pageCount,
-                            ),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil().setHeight(10),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 150.0,
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      height: 150.0,
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      height: 150.0,
-                      color: Colors.blue,
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        ),
-      ), 
-    );
-  }
-
-  @override
   void initState() {
     super.initState();
+
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
       print(_controller.offset); //打印滚动位置
-      // if (_controller.offset < 1000 && showToTopBtn) {
-      //   setState(() {
-      //     showToTopBtn = false;
-      //   });
-      // } else if (_controller.offset >= 1000 && showToTopBtn == false) {
-      //   setState(() {
-      //     showToTopBtn = true;
-      //   });
-      // }
+      if (_controller.offset < 300 && allowJumpTo) {
+        setState(() {
+          allowJumpTo = false;
+        });
+        _controller.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+      } else if (_controller.offset >= 150 && allowJumpTo == false) {
+        setState(() {
+          allowJumpTo = true;  
+        });
+        _controller.animateTo(criticalH, duration: Duration(milliseconds: 200), curve: Curves.ease);
+      }
     });
  
     // 获取 rootbundle
@@ -168,7 +98,7 @@ class _MainScreenState extends State<MainScreen> {
     // 请求网络数据
     // ...
   }
-
+  
   @override
   void dispose(){
     _controller.dispose();
@@ -189,6 +119,117 @@ class _MainScreenState extends State<MainScreen> {
   void setInitialPage(int initPage){
     this._initialPage = initPage;
   }
+
+  @override
+  Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
+
+    final size = MediaQuery.of(context).size;
+    double screenHeight = size.height;
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+    bool isDark = ThemeUtils.isDark(context);
+    _appBar = createNaviBar();
+    double appBarHeight = _appBar.preferredSize.height;
+
+    criticalH = screenHeight - appBarHeight - statusBarHeight;
+    return Scaffold(
+        appBar: _appBar,
+        body: Material(
+          child: Stack(
+            children: <Widget>[
+              // SpriteWidget(weatherWorld),
+              Scrollbar(
+                child: NotificationListener(
+                  onNotification: (ScrollNotification notification){
+                    double offset = notification.metrics.pixels;
+                    // if(offset >= 100){
+                    //   _controller.animateTo(screenHeight - appBarHeight - statusBarHeight,
+                    //   duration: Duration(milliseconds: 200),
+                    //   curve: Curves.ease
+                    //   );
+                    // }else if()
+                  },
+                  child: ListView.builder(
+                  itemCount: 5,
+                  controller: _controller,
+                  itemBuilder: (context, index){
+                    if(index == 0){
+                      return Container(
+                          height: screenHeight - appBarHeight - statusBarHeight,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                color: Colors.transparent,
+                                width: ScreenUtil.screenWidth,
+                                height: ScreenUtil().setHeight(180),
+                                child: HeaderContentView()
+                              ),
+                              SizedBox(
+                                height: ScreenUtil().setHeight(10),
+                              ),
+                              Container(
+                                color: Colors.transparent,
+                                width: ScreenUtil.screenWidth,
+                                height: ScreenUtil().setHeight(950),
+                                child: PageView.builder(
+                                  onPageChanged: onPageChanged,
+                                  controller: _pageController,
+                                  itemBuilder: (context, index){
+                                    return WeatherInfo();
+                                  },
+                                  itemCount: _pageCount,
+                                ),
+                              ),
+                              SizedBox(
+                                height: ScreenUtil().setHeight(10),
+                              ),
+                            ],
+                          ),
+                      );
+                    }else if(index == 1){
+                      return Container(
+                          height: 150.0,
+                          color: Colors.red,
+                        );
+                    }else if(index == 2){
+                      return Container(
+                          height: 150.0,
+                          color: Colors.blue,
+                        );
+                    }else if(index == 3){
+                      return Container(
+                          height: 150.0,
+                          color: Colors.red,
+                        );
+                    }else if(index == 4){
+                      return Container(
+                          height: 150.0,
+                          color: Colors.blue,
+                        );
+                    }
+                    return Container(
+
+                    );
+                  }
+                ),
+                ),
+              ),
+          ],
+        ),
+      ), 
+      floatingActionButton: !allowJumpTo ? null : FloatingActionButton(
+          child: Icon(Icons.arrow_upward),
+          onPressed: () {
+            //返回到顶部时执行动画
+            _controller.animateTo(.0,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.ease
+            );
+          }
+      ),
+    );
+  }
+
 
   Widget createNaviBar(){
     return AppBar(
