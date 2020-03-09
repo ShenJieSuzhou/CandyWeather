@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:bezier_chart/bezier_chart.dart';
+import 'package:cw_proj/Model/weatherDaily.dart';
+import 'dart:ui' as ui;
 
 class ForcastDay extends StatefulWidget {
+  List<WeatherDaily> dailys;
+  List<ui.Image> dayIcons;
+  List<ui.Image> nightIcons;
+
   @override
   _ForcastDayState createState() => _ForcastDayState();
 }
@@ -41,5 +47,31 @@ class _ForcastDayState extends State<ForcastDay> {
         ),
       ),
     );
+  }
+}
+
+class _futureWeatherPainter extends CustomPainter {
+  _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons);
+  List<WeatherDaily> dailys;
+  List<ui.Image> dayIcons;
+  List<ui.Image> nightIcons;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // TODO: implement paint
+    setMinMax();
+    
+
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    return null;
+  }
+
+  // 设置最高气温，最低气温
+  void setMinMax(){
+
   }
 }
