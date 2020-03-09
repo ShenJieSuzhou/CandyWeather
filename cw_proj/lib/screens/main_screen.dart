@@ -1,5 +1,6 @@
 import 'dart:wasm';
 
+import 'package:cw_proj/widgets/live_index.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui' as ui show Image;
@@ -14,6 +15,7 @@ import 'package:cw_proj/widgets/HeaderContentView.dart';
 import 'package:spritewidget/spritewidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/widgets/air_quality.dart';
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -182,15 +184,9 @@ class _MainScreenState extends State<MainScreen> {
                           color: Colors.red,
                         );
                     }else if(index == 2){
-                      return Container(
-                          height: 150.0,
-                          color: Colors.blue,
-                        );
+                      return AirQuality();
                     }else if(index == 3){
-                      return Container(
-                          height: 150.0,
-                          color: Colors.red,
-                        );
+                      return LiveIndex();
                     }else if(index == 4){
                       return Container(
                           height: 150.0,
