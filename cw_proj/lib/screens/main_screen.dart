@@ -16,6 +16,8 @@ import 'package:spritewidget/spritewidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/widgets/air_quality.dart';
+import 'package:cw_proj/widgets/forecast_day.dart';
+import 'package:cw_proj/widgets/forecast_hours.dart';
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -179,19 +181,13 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                       );
                     }else if(index == 1){
-                      return Container(
-                          height: 150.0,
-                          color: Colors.red,
-                        );
+                      return ForcastDay();
                     }else if(index == 2){
                       return AirQuality();
                     }else if(index == 3){
-                      return LiveIndex();
+                      return ForcastHours();
                     }else if(index == 4){
-                      return Container(
-                          height: 150.0,
-                          color: Colors.blue,
-                        );
+                      return LiveIndex();
                     }
                     return Container(
 
