@@ -1,6 +1,3 @@
-import 'dart:wasm';
-
-import 'package:cw_proj/widgets/live_index.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui' as ui show Image;
@@ -18,6 +15,9 @@ import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/widgets/air_quality.dart';
 import 'package:cw_proj/widgets/forecast_day.dart';
 import 'package:cw_proj/widgets/forecast_hours.dart';
+import 'package:cw_proj/widgets/live_index.dart';
+import 'package:cw_proj/Model/daily.dart';
+
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -45,6 +45,8 @@ class _MainScreenState extends State<MainScreen> {
   ScrollController _controller = new ScrollController();
   bool allowJumpTo = false;
   double criticalH = 0.0;
+
+  List<Daily> dailys = List();
 
   // 加载本项目所需的 assets.
   Future<Null> _loadAssets(AssetBundle bundle) async {
@@ -101,6 +103,7 @@ class _MainScreenState extends State<MainScreen> {
     
     // 请求网络数据
     // ...
+    
   }
   
   @override
@@ -181,11 +184,23 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                       );
                     }else if(index == 1){
-                      return ForcastDay();
+                      return Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+                        ),
+                        height: 300,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                          child: ForcastDay(),
+                        ), 
+                      );
                     }else if(index == 2){
-                      return AirQuality();
-                    }else if(index == 3){
                       return ForcastHours();
+                    }else if(index == 3){
+                      return AirQuality();
                     }else if(index == 4){
                       return LiveIndex();
                     }

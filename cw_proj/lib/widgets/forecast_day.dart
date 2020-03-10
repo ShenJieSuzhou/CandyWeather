@@ -1,35 +1,132 @@
 import 'package:flutter/material.dart';
-import 'package:cw_proj/Model/weatherDaily.dart';
+import 'package:cw_proj/Model/Daily.dart';
 import 'dart:ui' as ui;
-import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/util/time_util.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'dart:typed_data';
+import 'package:cw_proj/Model/weather_bean.dart';
 
-class ForcastDay extends StatelessWidget {
-  final List<WeatherDaily> dailys;
-  final List<ui.Image> dayIcons;
-  final List<ui.Image> nightIcons;
+class ForcastDay extends StatefulWidget {
+  const ForcastDay({Key key, this.weatherResult}) : super(key: key);
+  final WeatherResult weatherResult;
+  @override
+  _ForcastDayState createState() => _ForcastDayState();
+}
 
-  ForcastDay({Key key, this.dailys, this.dayIcons, this.nightIcons}) : super(key: key);
+class _ForcastDayState extends State<ForcastDay> {
+  List<Daily> dailys = [];
+  List<ui.Image> dayIcons = [];
+  List<ui.Image> nightIcons = [];
+  bool imageLoaded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    for(int i = 0; i< 7; i++){
+      Daily daily = Daily();
+      daily.conditionDay = "少云";
+      daily.conditionNight = "少云";
+      daily.conditionIdDay = "1";
+      daily.conditionIdNight = "2";
+      daily.tempDay = "22";
+      daily.tempNight = "14";
+      daily.windDirDay = "东北风";
+      daily.windDirNight = "东北风";
+      daily.windLevelDay = "4";
+      daily.windLevelNight = "4";
+      daily.week = "星期二";
+      daily.date = "2020-03-10"; 
+      dailys.add(daily);
+    }
+
+    initDayImage("assets/weatherIcons/W0.png");
+    initNightImage("assets/weatherIcons/W0.png");
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
-    return CustomPaint(
-      painter: _futureWeatherPainter(dailys, dayIcons, nightIcons),
-      size: Size(screenW - 40, 310),
-    );
+    if(imageLoaded){
+      return CustomPaint(
+        painter: _futureWeatherPainter(dailys, dayIcons, nightIcons),
+        size: Size(screenW - 40, 310),
+      );
+    }else{
+      return Container(
+
+      );
+    }
+    
+  }
+
+  Future <Null> initDayImage(String path) async {
+    final ByteData data = await rootBundle.load(path);
+    ui.Image image = await loadDayImage(new Uint8List.view(data.buffer));
+    dayIcons.add(image);
+    int length = dailys.length;
+    if (dayIcons.length < length) {
+      initDayImage("assets/weatherIcons/W0.png");
+    }else{
+      if(dayIcons.length == length && dayIcons.length == length){
+        setState(() {
+          imageLoaded = true;
+        });
+      }
+    }
+  }
+
+  //加载白天天气图片
+  Future<ui.Image> loadDayImage(List<int> img) async {
+
+    final Completer<ui.Image> completer = new Completer();
+    ui.decodeImageFromList(img, (ui.Image img) {
+      return completer.complete(img);
+    });
+    return completer.future;
+  }
+
+  Future <Null> initNightImage(String path) async {
+    final ByteData data = await rootBundle.load(path);
+    ui.Image image = await loadDayImage(new Uint8List.view(data.buffer));
+    nightIcons.add(image);
+    int length = dailys.length;
+    if (nightIcons.length < length) {
+      initNightImage("assets/weatherIcons/W0.png");
+    }else{
+      if(nightIcons.length == length && dayIcons.length == length){
+        setState(() {
+          imageLoaded = true;
+        });
+      }
+    }
+  }
+
+  //加载白天天气图片
+  Future<ui.Image> loadNightImage(List<int> img) async {
+
+    final Completer<ui.Image> completer = new Completer();
+    ui.decodeImageFromList(img, (ui.Image img) {
+      return completer.complete(img);
+    });
+    return completer.future;
   }
 }
 
+
+
+
 class _futureWeatherPainter extends CustomPainter {
   _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons);
-  List<WeatherDaily> dailys;
-  List<ui.Image> dayIcons;
-  List<ui.Image> nightIcons;
+  final List<Daily> dailys;
+  final List<ui.Image> dayIcons;
+  final List<ui.Image> nightIcons;
   final double itemWidth = 60;
   final double textHeight = 120;
   final double temHeight = 80;
-  int maxTem, minTem;
+  int maxTem = 30, minTem = 20;
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -60,6 +60,7 @@ flutter:
     - assets/weathersprites.png
     - assets/Config/Locations.json
     - assets/weatherIcons/W0.png
+    - assets/weatherIcons/W1.png
 
   fonts:
     - family: iconfont
