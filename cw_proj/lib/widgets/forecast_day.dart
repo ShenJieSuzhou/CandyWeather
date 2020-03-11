@@ -181,6 +181,10 @@ class _futureWeatherPainter extends CustomPainter {
       maxPoints.add(maxOffset);
       minPoints.add(minOffset);
 
+      // 绘制温度
+      drawText(canvas, i, daily.tempDay + "°", maxDy - 20.0, fontSize: 10);
+      drawText(canvas, i, daily.tempNight + "°", minDy + 10.0, fontSize: 10);
+
       var date;
       if(i == 0){
         date = daily.week + "\n" + "今天";
