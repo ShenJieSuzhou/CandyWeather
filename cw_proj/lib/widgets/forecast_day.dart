@@ -61,7 +61,6 @@ class _ForcastDayState extends State<ForcastDay> {
 
       );
     }
-    
   }
 
   Future <Null> initDayImage(String path) async {
@@ -117,9 +116,6 @@ class _ForcastDayState extends State<ForcastDay> {
   }
 }
 
-
-
-
 class _futureWeatherPainter extends CustomPainter {
   _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth, );
   final List<Daily> dailys;
@@ -129,7 +125,6 @@ class _futureWeatherPainter extends CustomPainter {
   final double textHeight = 140;
   final double temHeight = 80;
   int maxTem, minTem;
-
 
   @override
   void paint(Canvas canvas, Size size) {

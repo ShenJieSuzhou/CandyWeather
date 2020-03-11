@@ -197,19 +197,6 @@ class _MainScreenState extends State<MainScreen> {
                           child: ForcastDay(),
                         ),
                       );
-                      
-                      // Container(
-                      //   // color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-                      //   // decoration: BoxDecoration(
-                      //   //   shape: BoxShape.rectangle,
-                      //   //   borderRadius: BorderRadius.all(Radius.circular(8)),
-                      //   //   color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-                      //   // ),
-                      //   height: 350,
-                      //   // child: Container(
-                        
-                      //   // )
-                      // );
                     }else if(index == 2){
                       return ForcastHours();
                     }else if(index == 3){
