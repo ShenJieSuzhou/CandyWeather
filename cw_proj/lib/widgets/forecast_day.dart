@@ -10,6 +10,7 @@ import 'package:cw_proj/Model/weather_bean.dart';
 class ForcastDay extends StatefulWidget {
   const ForcastDay({Key key, this.weatherResult}) : super(key: key);
   final WeatherResult weatherResult;
+
   @override
   _ForcastDayState createState() => _ForcastDayState();
 }
@@ -32,7 +33,7 @@ class _ForcastDayState extends State<ForcastDay> {
       daily.conditionIdDay = "1";
       daily.conditionIdNight = "2";
       daily.tempDay = "22";
-      daily.tempNight = "14";
+      daily.tempNight = "10";
       daily.windDirDay = "东北风";
       daily.windDirNight = "东北风";
       daily.windLevelDay = "4";
@@ -49,10 +50,11 @@ class _ForcastDayState extends State<ForcastDay> {
   @override
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
+    double itemWidth = (screenW - 60) / 7;
     if(imageLoaded){
       return CustomPaint(
-        painter: _futureWeatherPainter(dailys, dayIcons, nightIcons),
-        size: Size(screenW - 40, 310),
+        painter: _futureWeatherPainter(dailys, dayIcons, nightIcons, itemWidth),
+        size: Size(screenW - 60, 350),
       );
     }else{
       return Container(
@@ -119,14 +121,15 @@ class _ForcastDayState extends State<ForcastDay> {
 
 
 class _futureWeatherPainter extends CustomPainter {
-  _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons);
+  _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth, );
   final List<Daily> dailys;
   final List<ui.Image> dayIcons;
   final List<ui.Image> nightIcons;
-  final double itemWidth = 60;
-  final double textHeight = 120;
+  final double itemWidth;
+  final double textHeight = 140;
   final double temHeight = 80;
-  int maxTem = 30, minTem = 20;
+  int maxTem, minTem;
+
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -135,26 +138,26 @@ class _futureWeatherPainter extends CustomPainter {
     var maxPaint = new Paint()
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..color = Color(0xffeceea6)
+      ..color = Color(0xff1c1c1e)
       ..isAntiAlias = true
       ..strokeWidth = 2;
 
     var minPaint = new Paint()
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..color = Color(0xffa3f4fe)
+      ..color = Color(0xffb6b6b6)
       ..isAntiAlias = true
       ..strokeWidth = 2;
 
     var pointPaint = Paint()
-      ..color = Colors.green
+      ..color = Color(0xff959498)
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = true
       ..strokeWidth = 8;
 
     var linePaint = Paint()
-      ..color = Colors.white70
+      ..color = Colors.black
       ..strokeWidth = 0.5
       ..style = PaintingStyle.stroke;
 
@@ -168,8 +171,8 @@ class _futureWeatherPainter extends CustomPainter {
     for(int i = 0; i < dailys.length; i++){
       var daily = dailys[i];
       var dx = itemWidth/2 + itemWidth * i;
-      var maxDy = textHeight + (maxTem - int.parse(daily.tempDay)) * oneTemHeight;
-      var minDy = textHeight + (maxTem - int.parse(daily.tempNight)) * oneTemHeight;
+      var maxDy = textHeight + (maxTem - int.parse(daily.tempDay)) * oneTemHeight + 5;
+      var minDy = textHeight + (maxTem - int.parse(daily.tempNight)) * oneTemHeight - 5;
       var maxOffset = Offset(dx, maxDy);
       var minOffset = Offset(dx, minDy);
 
@@ -192,17 +195,17 @@ class _futureWeatherPainter extends CustomPainter {
         date = daily.week + "\n" + TimeUtil.getWeatherDate(daily.date);
       }
       //绘制日期
-      drawText(canvas, i, date ,10);
+      drawText(canvas, i, date ,15, fontSize: 12);
       //绘制白天天气
       canvas.drawImageRect(dayIcons[i],Rect.fromLTWH(0, 0, dayIcons[i].width.toDouble(), dayIcons[i].height.toDouble()),
-          Rect.fromLTWH(itemWidth/4 + itemWidth*i, 50,30,30),linePaint);
-      drawText(canvas, i, daily.conditionDay, 90);
+          Rect.fromLTWH(itemWidth/4 + itemWidth*i, 55, itemWidth/2, itemWidth/2),linePaint);
+      drawText(canvas, i, daily.conditionDay, 90, fontSize: 12);
       //绘制夜间天气
       canvas.drawImageRect(nightIcons[i],Rect.fromLTWH(0, 0, nightIcons[i].width.toDouble(),  nightIcons[i].height.toDouble()),
-          Rect.fromLTWH(itemWidth/4 + itemWidth*i, textHeight + temHeight + 10,30,30),new Paint());
-      drawText(canvas, i, daily.conditionNight, textHeight+temHeight + 45);
+          Rect.fromLTWH(itemWidth/4 + itemWidth*i, textHeight + temHeight + 25, itemWidth/2, itemWidth/2),new Paint());
+      drawText(canvas, i, daily.conditionNight, textHeight+temHeight + 60, fontSize: 12);
       // 绘制风向风力
-      drawText(canvas, i, daily.windDirNight + "\n" + daily.windLevelNight, textHeight+temHeight + 70,frontSize: 10);
+      drawText(canvas, i, daily.windDirNight + "\n" + daily.windLevelNight, textHeight+temHeight + 85,fontSize: 10);
     }
     canvas.drawPath(maxPath, maxPaint);
     canvas.drawPath(minPath, minPaint);
@@ -217,19 +220,27 @@ class _futureWeatherPainter extends CustomPainter {
 
   // 设置最高气温，最低气温
   void setMinMax(){
-
+    minTem = maxTem = int.parse(dailys[0].tempDay);
+    for(Daily daily in dailys){
+      if(int.parse(daily.tempDay) > maxTem){
+        maxTem = int.parse(daily.tempDay);
+      }
+      if(int.parse(daily.tempNight) < minTem){
+        minTem = int.parse(daily.tempNight);
+      }
+    }
   }
 
   //绘制文字
-  drawText(Canvas canvas, int i,String text,double height,{double frontSize}) {
+  drawText(Canvas canvas, int i,String text,double height,{double fontSize}) {
     var pb = ui.ParagraphBuilder(ui.ParagraphStyle(
       textAlign: TextAlign.center,//居中
-      fontSize: frontSize == null ?14:frontSize,//大小
+      fontSize: fontSize == null ?14:fontSize,//大小
     ));
+    //文字颜色
+    pb.pushStyle(ui.TextStyle(color: Colors.black));
     //添加文字
     pb.addText(text);
-    //文字颜色
-    pb.pushStyle(ui.TextStyle(color: Colors.white));
     //文本宽度
     var paragraph = pb.build()..layout(ui.ParagraphConstraints(width: itemWidth));
     //绘制文字

@@ -184,19 +184,32 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                       );
                     }else if(index == 1){
-                      return Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-                        ),
-                        height: 300,
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                        child: Container(
+                          height: 350.0,
+                          width: ScreenUtil.screenWidth,
+                          decoration: BoxDecoration(
+                            color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
                           child: ForcastDay(),
-                        ), 
+                        ),
                       );
+                      
+                      // Container(
+                      //   // color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+                      //   // decoration: BoxDecoration(
+                      //   //   shape: BoxShape.rectangle,
+                      //   //   borderRadius: BorderRadius.all(Radius.circular(8)),
+                      //   //   color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+                      //   // ),
+                      //   height: 350,
+                      //   // child: Container(
+                        
+                      //   // )
+                      // );
                     }else if(index == 2){
                       return ForcastHours();
                     }else if(index == 3){
