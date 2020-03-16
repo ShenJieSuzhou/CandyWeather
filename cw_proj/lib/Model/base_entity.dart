@@ -1,5 +1,5 @@
 import 'package:cw_proj/common/common.dart';
-// import '../entity_factory.dart';
+import 'package:cw_proj/Model/entity_factory.dart';
 
 class BaseEntity<T>{
 
@@ -29,9 +29,8 @@ class BaseEntity<T>{
       return json.toString() as S;
     }else if (T.toString() == "Map<dynamic, dynamic>"){
       return json as S;
+    }else {
+      return EntityFactory.generateOBJ(json);
     }
-    // else {
-    //   return EntityFactory.generateOBJ(json);
-    // }
   }
 }

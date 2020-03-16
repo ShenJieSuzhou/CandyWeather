@@ -128,8 +128,8 @@ class AdapterInterceptor extends Interceptor{
   static const String defaultText = "\"无返回信息\"";
   static const String notFound = "未找到查询信息";
 
-  static const String failureFormat = "{\"code\":%d,\"message\":\"%s\"}";
-  static const String successFormat = "{\"code\":0,\"data\":%s,\"message\":\"\"}";
+  static const String failureFormat = "";
+  static const String successFormat = "{\"code\":0,\"data\":%s,\"msg\":%s,\"rc\":%s}";
   
   @override
   onResponse(Response response) {

@@ -5,26 +5,45 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+// import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:cw_proj/main.dart';
+import 'package:cw_proj/util/dio_utils.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  //testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    
+    group('dio_test', () {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    //await tester.pumpWidget(MyApp());
+    // Map<String, String> headers = Map();
+    // headers['Authorization'] = 'APPCODE'+appcode;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    Map<String, String> bodys = Map();
+    bodys['cityId'] = '2';
+    bodys['token'] = 'igptvxkwb265gcxvolewrzoun8jdhbun';
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    DioUtils.instance.asyncRequestNetwork(Method.post, 'forecast24hours', onSuccess: (data){
+      print(data);
+    },
+    onError:(_, __){
+      print('$_, $__');
+    },
+    queryParameters: bodys,
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // // Verify that our counter starts at 0.
+    // expect(find.text('0'), findsOneWidget);
+    // expect(find.text('1'), findsNothing);
+
+    // // Tap the '+' icon and trigger a frame.
+    // await tester.tap(find.byIcon(Icons.add));
+    // await tester.pump();
+
+    // // Verify that our counter has incremented.
+    // expect(find.text('0'), findsNothing);
+    // expect(find.text('1'), findsOneWidget);
   });
 }

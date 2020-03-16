@@ -17,6 +17,8 @@ import 'package:cw_proj/widgets/forecast_day.dart';
 import 'package:cw_proj/widgets/forecast_hours.dart';
 import 'package:cw_proj/widgets/live_index.dart';
 import 'package:cw_proj/Model/daily.dart';
+import 'package:cw_proj/util/dio_utils.dart';
+import 'package:cw_proj/Model/aqi.dart';
 
 
 ImageMap _images;
@@ -102,8 +104,24 @@ class _MainScreenState extends State<MainScreen> {
     citys = fetchCity();
     
     // 请求网络数据
-    // ...
+    getDatas();
     
+    
+    
+  }
+
+  Future getDatas() async {
+    Map<String, String> bodys = Map();
+    bodys['cityId'] = '2';
+    bodys['token'] = '8b36edf8e3444047812be3a59d27bab9';
+    await DioUtils.instance.requestNetwork<AQI>(Method.post, 'aqi', onSuccess: (data){
+          print(data.cityName);
+        },
+        onError:(_, __){
+          print('$_, $__');
+        },
+        queryParameters: bodys,
+    );
   }
   
   @override
