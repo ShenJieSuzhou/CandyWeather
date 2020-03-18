@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cw_proj/Model/weather_hour.dart';
+import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class ForcastHours extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ForcastHoursState extends State<ForcastHours> {
   }
 
   //小时天气的item
-Widget _getHourItem(WeatherHour hourly) {
+Widget _getHourItem(Hours hourly) {
   return Container(
     height: 130,
     width: 60,

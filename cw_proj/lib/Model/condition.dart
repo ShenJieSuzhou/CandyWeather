@@ -32,7 +32,8 @@ class Condition {
       this.windLevel,
       this.windSpeed});
 
-  Condition.fromJson(Map<String, dynamic> json) {
+  Condition.fromJson(Map<String, dynamic> mJSON) {
+    Map<String, dynamic> json = mJSON['condition'];
     condition = json['condition'];
     conditionId = json['conditionId'];
     humidity = json['humidity'];
@@ -51,6 +52,7 @@ class Condition {
   }
 
   Map<String, dynamic> toJson() {
+    final Map<String, dynamic> condition = Map<String, dynamic>();
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
     data['conditionId'] = this.conditionId;
@@ -67,6 +69,7 @@ class Condition {
     data['windDir'] = this.windDir;
     data['windLevel'] = this.windLevel;
     data['windSpeed'] = this.windSpeed;
-    return data;
+    condition['condition'] = data;
+    return condition;
   }
 }
