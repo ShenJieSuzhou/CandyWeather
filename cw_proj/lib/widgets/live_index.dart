@@ -3,7 +3,7 @@ import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class LiveIndex extends StatefulWidget {
-  List<Live>liveArray;
+  Live live;
   @override
   _LiveIndexState createState() => _LiveIndexState();
 }

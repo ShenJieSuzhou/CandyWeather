@@ -16,32 +16,32 @@ class ForcastDay extends StatefulWidget {
 }
 
 class _ForcastDayState extends State<ForcastDay> {
-  List<Daily> dailys = [];
+  Daily dailys;
   List<ui.Image> dayIcons = [];
   List<ui.Image> nightIcons = [];
   bool imageLoaded = false;
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
-    for(int i = 0; i< 7; i++){
-      Daily daily = Daily();
-      daily.conditionDay = "少云";
-      daily.conditionNight = "少云";
-      daily.conditionIdDay = "1";
-      daily.conditionIdNight = "2";
-      daily.tempDay = "22";
-      daily.tempNight = "10";
-      daily.windDirDay = "东北风";
-      daily.windDirNight = "东北风";
-      daily.windLevelDay = "4";
-      daily.windLevelNight = "4";
-      daily.week = "星期二";
-      daily.date = "2020-03-10"; 
-      dailys.add(daily);
-    }
+    // for(int i = 0; i< 7; i++){
+    //   Daily daily = Daily();
+    //   daily.conditionDay = "少云";
+    //   daily.conditionNight = "少云";
+    //   daily.conditionIdDay = "1";
+    //   daily.conditionIdNight = "2";
+    //   daily.tempDay = "22";
+    //   daily.tempNight = "10";
+    //   daily.windDirDay = "东北风";
+    //   daily.windDirNight = "东北风";
+    //   daily.windLevelDay = "4";
+    //   daily.windLevelNight = "4";
+    //   daily.week = "星期二";
+    //   daily.date = "2020-03-10"; 
+    //   dailys.add(daily);
+    // }
 
     initDayImage("assets/weatherIcons/W0.png");
     initNightImage("assets/weatherIcons/W0.png");
@@ -67,7 +67,7 @@ class _ForcastDayState extends State<ForcastDay> {
     final ByteData data = await rootBundle.load(path);
     ui.Image image = await loadDayImage(new Uint8List.view(data.buffer));
     dayIcons.add(image);
-    int length = dailys.length;
+    int length = dailys.forecast.length;
     if (dayIcons.length < length) {
       initDayImage("assets/weatherIcons/W0.png");
     }else{
@@ -93,7 +93,7 @@ class _ForcastDayState extends State<ForcastDay> {
     final ByteData data = await rootBundle.load(path);
     ui.Image image = await loadDayImage(new Uint8List.view(data.buffer));
     nightIcons.add(image);
-    int length = dailys.length;
+    int length = dailys.forecast.length;
     if (nightIcons.length < length) {
       initNightImage("assets/weatherIcons/W0.png");
     }else{
@@ -118,7 +118,7 @@ class _ForcastDayState extends State<ForcastDay> {
 
 class _futureWeatherPainter extends CustomPainter {
   _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth, );
-  final List<Daily> dailys;
+  final Daily dailys;
   final List<ui.Image> dayIcons;
   final List<ui.Image> nightIcons;
   final double itemWidth;
@@ -163,8 +163,8 @@ class _futureWeatherPainter extends CustomPainter {
     List<Offset> minPoints = [];
     double oneTemHeight = temHeight / (maxTem - minTem);
 
-    for(int i = 0; i < dailys.length; i++){
-      var daily = dailys[i];
+    for(int i = 0; i < dailys.forecast.length; i++){
+      var daily = dailys.forecast[i];
       var dx = itemWidth/2 + itemWidth * i;
       var maxDy = textHeight + (maxTem - int.parse(daily.tempDay)) * oneTemHeight + 5;
       var minDy = textHeight + (maxTem - int.parse(daily.tempNight)) * oneTemHeight - 5;
@@ -187,11 +187,11 @@ class _futureWeatherPainter extends CustomPainter {
 
       var date;
       if(i == 0){
-        date = daily.week + "\n" + "今天";
+        date = daily.predictDate + "\n" + "今天";
       }else if(i == 1){
-        date = daily.week + "\n" + "明天";
+        date = daily.predictDate + "\n" + "明天";
       }else{
-        date = daily.week + "\n" + TimeUtil.getWeatherDate(daily.date);
+        date = daily.predictDate + "\n" + TimeUtil.getWeatherDate(daily.predictDate);
       }
       //绘制日期
       drawText(canvas, i, date ,15, fontSize: 12);
@@ -219,8 +219,8 @@ class _futureWeatherPainter extends CustomPainter {
 
   // 设置最高气温，最低气温
   void setMinMax(){
-    minTem = maxTem = int.parse(dailys[0].tempDay);
-    for(Daily daily in dailys){
+    minTem = maxTem = int.parse(dailys.forecast[0].tempDay);
+    for(Forecast daily in dailys.forecast){
       if(int.parse(daily.tempDay) > maxTem){
         maxTem = int.parse(daily.tempDay);
       }

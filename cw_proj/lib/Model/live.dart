@@ -1,7 +1,7 @@
 import 'package:common_utils/common_utils.dart';
 
 class Live {
-  List<LiveIndex> liveIndex;
+  List<LiveIndexs> liveIndex;
   Map<String, dynamic> indexs;
 
   Live({this.indexs});
@@ -10,9 +10,9 @@ class Live {
     if (json['liveIndex'] != null) {
       indexs = json['liveIndex'];
       String date = DateUtil.formatDateTime(DateTime.now().toString(), DateFormat.YEAR_MONTH_DAY, '-', '');
-      liveIndex = new List<LiveIndex>();
+      liveIndex = new List<LiveIndexs>();
       indexs[date].forEach((v) {
-        liveIndex.add(new LiveIndex.fromJson(v));
+        liveIndex.add(new LiveIndexs.fromJson(v));
       });
     }
   }
@@ -26,15 +26,15 @@ class Live {
   // }
 }
 
-class LiveIndex {
+class LiveIndexs {
   String day;
   String desc;
   String name;
   String status;
 
-  LiveIndex({this.day, this.desc, this.name, this.status});
+  LiveIndexs({this.day, this.desc, this.name, this.status});
 
-  LiveIndex.fromJson(Map<String, dynamic> json) {
+  LiveIndexs.fromJson(Map<String, dynamic> json) {
     day = json['day'];
     desc = json['desc'];
     name = json['name'];
