@@ -1,30 +1,29 @@
+import 'package:cw_proj/Model/condition.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui' as ui show Image;
 import 'package:flutter/services.dart';
-
-import 'package:cw_proj/widgets/weather_card.dart';
-import 'package:cw_proj/Model/SelLocations.dart';
-import 'package:cw_proj/util/configFile.dart';
-import 'package:cw_proj/screens/city_screen.dart';
-import 'package:cw_proj/screens/setting_screen.dart';
-import 'package:cw_proj/widgets/HeaderContentView.dart';
 import 'package:spritewidget/spritewidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:cw_proj/util/network_util.dart';
+import 'package:cw_proj/util/configFile.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/screens/city_screen.dart';
+import 'package:cw_proj/screens/setting_screen.dart';
+
+import 'package:cw_proj/widgets/HeaderContentView.dart';
 import 'package:cw_proj/widgets/air_quality.dart';
 import 'package:cw_proj/widgets/forecast_day.dart';
 import 'package:cw_proj/widgets/forecast_hours.dart';
 import 'package:cw_proj/widgets/live_index.dart';
+import 'package:cw_proj/widgets/weather_card.dart';
+
 import 'package:cw_proj/Model/daily.dart';
-import 'package:cw_proj/util/network_util.dart';
-// import 'package:cw_proj/util/dio_utils.dart';
-// import 'package:cw_proj/Model/aqi.dart';
-// import 'package:cw_proj/Model/condition.dart';
-// import 'package:cw_proj/Model/hours.dart';
-// import 'package:cw_proj/Model/live.dart';
-
-
+import 'package:cw_proj/Model/SelLocations.dart';
+import 'package:cw_proj/Model/aqi.dart';
+import 'package:cw_proj/Model/hours.dart';
+import 'package:cw_proj/Model/live.dart';
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -52,8 +51,12 @@ class _MainScreenState extends State<MainScreen> {
   bool allowJumpTo = false;
   double criticalH = 0.0;
   var _futureBuilderFuture;
-
-  List<Daily> dailys = List();
+  // 天气数据
+  Condition _condition;
+  AQI _aqi;
+  Hourly _hour;
+  Daily _daily;
+  Live _live;
 
   // 加载本项目所需的 assets.
   Future<Null> _loadAssets(AssetBundle bundle) async {
@@ -82,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
 
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
-      print(_controller.offset); //打印滚动位置
+      // print(_controller.offset); //打印滚动位置
       if (_controller.offset < 300 && allowJumpTo) {
         setState(() {
           allowJumpTo = false;
@@ -111,17 +114,24 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 获取天气数据
-  Future fetchWeatherData(String cityID) async {
+    Future fetchWeatherData(String cityID) async {
     return Future.wait([fetchCondition(cityID),
       fetchAQI(cityID),
       fetchHours(cityID),
       fetchDailys(cityID),
-      fetchLiveIndex(cityID)]).then((results){
+      // fetchLiveIndex(cityID)
+    ]).then((results){
         print('Condition:' + results[0].toString());
         print('aqi:' + results[1].toString());
         print('Hours:' + results[2].toString());
         print('Dailys:' + results[3].toString());
-        print('Liveindex:' + results[4].toString());
+        // print('Liveindex:' + results[4].toString());
+
+        _condition = results[0];
+        _aqi = results[1];
+        _hour = results[2];
+        _daily = results[3];
+        // _live = results[4];
     });
   }
 
@@ -202,7 +212,7 @@ class _MainScreenState extends State<MainScreen> {
                                               onPageChanged: onPageChanged,
                                               controller: _pageController,
                                               itemBuilder: (context, index){
-                                                return WeatherInfo();
+                                                return WeatherInfo(condition: _condition,);
                                               },
                                               itemCount: _pageCount,
                                             ),
@@ -224,15 +234,15 @@ class _MainScreenState extends State<MainScreen> {
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.all(Radius.circular(8)),
                                       ),
-                                      child: ForcastDay(),
+                                      child: ForcastDay(weatherResult: _daily),
                                     ),
                                   );
                                 }else if(index == 2){
                                   return ForcastHours();
                                 }else if(index == 3){
-                                  return AirQuality();
+                                  return AirQuality(aqi: _aqi,);
                                 }else if(index == 4){
-                                  return LiveIndexW();
+                                  return LiveIndex();
                                 }
                                 return Container(
 

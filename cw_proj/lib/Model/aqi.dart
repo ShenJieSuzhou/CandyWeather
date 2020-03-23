@@ -58,7 +58,7 @@ class AQI{
   Map<String, dynamic> toJson(){
     final Map<String, dynamic> aqi = Map<String, dynamic>();
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['co'] = this.cityName;
+    data['co'] = this.co;
     data['coC'] = this.coC;
     data['no2'] = this.no2;
     data['no2C'] = this.no2C;
@@ -74,7 +74,7 @@ class AQI{
     data['so2C'] = this.so2C;
     data['value'] = this.value;
 
-    aqi['api'] = data;
+    aqi['aqi'] = data;
     return aqi;
   }
 }

@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/Model/condition.dart';
 
 class WeatherInfo extends StatefulWidget {
-  final String tempture, condition, humidity, icon, pressure, 
-  realFeel, sunRise, sunSet, uvi, windDir, windLevel, windSpeed;
+  final Condition condition;
 
   WeatherInfo({
-    @required this.tempture,
-    @required this.condition,
-    @required this.humidity,
-    @required this.icon,
-    @required this.pressure,
-    @required this.realFeel,
-    @required this.sunRise,
-    @required this.sunSet,
-    @required this.uvi,
-    @required this.windDir,
-    @required this.windLevel,
-    @required this.windSpeed,
+    @required this.condition
   });
 
   @override
@@ -28,7 +17,7 @@ class WeatherInfo extends StatefulWidget {
 class _WeatherInfoState extends State<WeatherInfo> {
   
 
-  Widget realTimeWeather(double width, bool isDark){
+  Widget realTimeWeather(double width, bool isDark, Condition condition, String location){
     return Padding(
       padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), 10.0),
       child: Column(
@@ -39,7 +28,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text("苏州", 
+                Text(location, 
                   style: TextStyle(
                       fontSize: ScreenUtil().setSp(50),
                     ),
@@ -60,7 +49,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
           ),
           Container(
             height: ScreenUtil().setHeight(50),
-            child: Text("23°", 
+            child: Text(condition.temp + "°",
                       style: TextStyle(
                       fontSize: ScreenUtil().setSp(50),
                     ),
@@ -74,7 +63,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text("晴间多云", 
+                  child: Text(condition.condition,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(40),
                     ),
@@ -82,7 +71,8 @@ class _WeatherInfoState extends State<WeatherInfo> {
                 ),
                 Align(
                   alignment: FractionalOffset.centerRight,
-                  child: Icon(Icons.bookmark, size: ScreenUtil().setWidth(60), color: isDark? Colors.white : Colors.black,),
+                  //child: Icon(Ic size: ScreenUtil().setWidth(60), color: isDark? Colors.white : Colors.black,),
+                  child: Image.asset("assets/weatherIcons/W" + condition.icon + ".png",width: ScreenUtil().setWidth(60),)
                 ),
               ],
             )
@@ -91,7 +81,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
             height: ScreenUtil().setHeight(20),
           ),
           Expanded(
-            child: Text("12小时内不会下雨，请放心出门", 
+            child: Text(condition.tips, 
                       style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
                     ),
@@ -102,7 +92,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
     );
   }
 
-  Widget bingDeskPic(double width){
+  Widget bingDeskPic(double width, String picPath){
     return Container(
       margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Container(
@@ -110,7 +100,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.all(Radius.circular(8)),
           image: DecorationImage(
-            image: AssetImage('assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg'),
+            image: AssetImage(picPath),
             fit: BoxFit.fitHeight
           )
         ),
@@ -135,7 +125,6 @@ class _WeatherInfoState extends State<WeatherInfo> {
                 width: ScreenUtil().setWidth(20),
               ),
               Expanded(
-                //child: Text('上面代码中，我们通过TextSpan实现了一个基础文本片段和一个链接片段，然后通过Text.rich 方法'),
                 child: Column(
                   children: <Widget>[
                     Text('有许多事,在你还不懂得珍惜之前已成旧事。有许多事,在你还不懂得珍惜之前已成旧事。',
@@ -162,32 +151,11 @@ class _WeatherInfoState extends State<WeatherInfo> {
     );
   }
 
-  // Widget futureWeather(double height){
-  //   return Container(
-  //     decoration: BoxDecoration(
-        
-  //     ),
-  //     height: height,
-  //     padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-  //     child: ListView.builder(
-  //       primary: false,
-  //       shrinkWrap: true,
-  //       itemExtent: 50,
-  //       itemCount: 5,
-  //       itemBuilder: (BuildContext context, int index){
-  //         return ListTile(title: Text("今天"), 
-  //         subtitle: Text("晴间多云"),
-  //         trailing: Icon(Icons.face),
-  //         contentPadding: EdgeInsets.all(0),);
-  //       },
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
     double width = MediaQuery.of(context).size.width;
+    
     return Padding(
       padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
       child: InkWell(
@@ -202,14 +170,14 @@ class _WeatherInfoState extends State<WeatherInfo> {
             children: <Widget>[
               Container(
                 height: ScreenUtil().setHeight(310),
-                child: realTimeWeather(width, isDark),
+                child: realTimeWeather(width, isDark, widget.condition, "苏州"),
               ),
               SizedBox(
                 height: ScreenUtil().setWidth(10),
               ),
               Container(
                 height: ScreenUtil().setHeight(420),
-                child: bingDeskPic(width),
+                child: bingDeskPic(width, "assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg"),
               ),
               SizedBox(
                 height: ScreenUtil().setWidth(10),

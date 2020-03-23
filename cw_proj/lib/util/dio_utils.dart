@@ -8,6 +8,7 @@ import 'package:cw_proj/Model/base_entity.dart';
 import 'package:cw_proj/Model/error_handle.dart';
 import 'intercept.dart';
 
+
 class DioUtils {
 
   static final DioUtils _singleton = DioUtils._internal();
@@ -50,11 +51,27 @@ class DioUtils {
   }
 
   // 数据返回格式统一，统一处理异常
-  Future<BaseEntity<T>> _request<T>(String method, String url, {
+  Future<BaseEntity<T>> mrequest<T>(String method, String url, {
     dynamic data, Map<String, dynamic> queryParameters,
     CancelToken cancelToken, Options options
   }) async {
     var response = await _dio.request(url, data: data, queryParameters: queryParameters, options: _checkOptions(method, options), cancelToken: cancelToken);
+    try {
+      /// 集成测试无法使用 isolate
+      Map<String, dynamic> _map = Constant.isTest ? parseData(response.data.toString()) : await compute(parseData, response.data.toString());
+      return BaseEntity.fromJson(_map);
+    }catch(e){
+      print(e);
+      return BaseEntity(ExceptionHandle.parse_error, "数据解析错误", null);
+    }
+  }
+
+  Future<BaseEntity<T>> requestMJData<T>(Method method, String url, {
+    dynamic data, Map<String, dynamic> queryParameters,
+    CancelToken cancelToken, Options options
+  }) async {
+    String m = _getRequestMethod(method);
+    var response = await _dio.request(url, data: data, queryParameters: queryParameters, options: _checkOptions(m, options), cancelToken: cancelToken);
     try {
       /// 集成测试无法使用 isolate
       Map<String, dynamic> _map = Constant.isTest ? parseData(response.data.toString()) : await compute(parseData, response.data.toString());
@@ -81,7 +98,7 @@ class DioUtils {
         CancelToken cancelToken, Options options, bool isList : false
   }) async {
     String m = _getRequestMethod(method);
-    return await _request<T>(m, url,
+    return await mrequest<T>(m, url,
         data: params,
         queryParameters: queryParameters,
         options: options,
@@ -115,7 +132,7 @@ class DioUtils {
     CancelToken cancelToken, Options options, bool isList : false
   }){
     String m = _getRequestMethod(method);
-    Observable.fromFuture(_request<T>(m, url, data: params, queryParameters: queryParameters, options: options, cancelToken: cancelToken))
+    Observable.fromFuture(mrequest<T>(m, url, data: params, queryParameters: queryParameters, options: options, cancelToken: cancelToken))
         .asBroadcastStream()
         .listen((result){
       if (result.code == 0){

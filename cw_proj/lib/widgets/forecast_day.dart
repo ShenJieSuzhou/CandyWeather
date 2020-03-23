@@ -1,22 +1,22 @@
+
 import 'package:flutter/material.dart';
-import 'package:cw_proj/Model/Daily.dart';
+import 'package:cw_proj/Model/daily.dart';
 import 'dart:ui' as ui;
 import 'package:cw_proj/util/time_util.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
-import 'package:cw_proj/Model/weather_bean.dart';
 
 class ForcastDay extends StatefulWidget {
-  const ForcastDay({Key key, this.weatherResult}) : super(key: key);
-  final WeatherResult weatherResult;
+  final Daily weatherResult;
+  const ForcastDay({this.weatherResult});
 
   @override
   _ForcastDayState createState() => _ForcastDayState();
 }
 
 class _ForcastDayState extends State<ForcastDay> {
-  Daily dailys;
+  List<Forecast> dailys;
   List<ui.Image> dayIcons = [];
   List<ui.Image> nightIcons = [];
   bool imageLoaded = false;
@@ -25,26 +25,14 @@ class _ForcastDayState extends State<ForcastDay> {
   void initState() {
 
     super.initState();
+    for(int i = 0; i < 7; i++){
+      Forecast forecast = widget.weatherResult.forecast[i];
+      dailys.add(forecast);
+    }
 
-    // for(int i = 0; i< 7; i++){
-    //   Daily daily = Daily();
-    //   daily.conditionDay = "少云";
-    //   daily.conditionNight = "少云";
-    //   daily.conditionIdDay = "1";
-    //   daily.conditionIdNight = "2";
-    //   daily.tempDay = "22";
-    //   daily.tempNight = "10";
-    //   daily.windDirDay = "东北风";
-    //   daily.windDirNight = "东北风";
-    //   daily.windLevelDay = "4";
-    //   daily.windLevelNight = "4";
-    //   daily.week = "星期二";
-    //   daily.date = "2020-03-10"; 
-    //   dailys.add(daily);
-    // }
-
-    initDayImage("assets/weatherIcons/W0.png");
-    initNightImage("assets/weatherIcons/W0.png");
+    Forecast forecast = widget.weatherResult.forecast[0];
+    initDayImage("assets/weatherIcons/W" + forecast.conditionIdDay + ".png");
+    initNightImage("assets/weatherIcons/W" +forecast.conditionIdNight + ".png"); 
   }
 
   @override
@@ -67,9 +55,10 @@ class _ForcastDayState extends State<ForcastDay> {
     final ByteData data = await rootBundle.load(path);
     ui.Image image = await loadDayImage(new Uint8List.view(data.buffer));
     dayIcons.add(image);
-    int length = dailys.forecast.length;
+    int length = dailys.length;
     if (dayIcons.length < length) {
-      initDayImage("assets/weatherIcons/W0.png");
+      var dayNight = dailys[dayIcons.length].conditionIdDay;
+      initDayImage("assets/weatherIcons/W" + dayNight + ".png");
     }else{
       if(dayIcons.length == length && dayIcons.length == length){
         setState(() {
@@ -93,9 +82,10 @@ class _ForcastDayState extends State<ForcastDay> {
     final ByteData data = await rootBundle.load(path);
     ui.Image image = await loadDayImage(new Uint8List.view(data.buffer));
     nightIcons.add(image);
-    int length = dailys.forecast.length;
+    int length = dailys.length;
     if (nightIcons.length < length) {
-      initNightImage("assets/weatherIcons/W0.png");
+      var dayNight = dailys[dayIcons.length].conditionIdNight;
+      initNightImage("assets/weatherIcons/W" + dayNight + ".png");
     }else{
       if(nightIcons.length == length && dayIcons.length == length){
         setState(() {
@@ -118,7 +108,7 @@ class _ForcastDayState extends State<ForcastDay> {
 
 class _futureWeatherPainter extends CustomPainter {
   _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth, );
-  final Daily dailys;
+  List<Forecast> dailys;
   final List<ui.Image> dayIcons;
   final List<ui.Image> nightIcons;
   final double itemWidth;
@@ -163,8 +153,8 @@ class _futureWeatherPainter extends CustomPainter {
     List<Offset> minPoints = [];
     double oneTemHeight = temHeight / (maxTem - minTem);
 
-    for(int i = 0; i < dailys.forecast.length; i++){
-      var daily = dailys.forecast[i];
+    for(int i = 0; i < dailys.length; i++){
+      var daily = dailys[i];
       var dx = itemWidth/2 + itemWidth * i;
       var maxDy = textHeight + (maxTem - int.parse(daily.tempDay)) * oneTemHeight + 5;
       var minDy = textHeight + (maxTem - int.parse(daily.tempNight)) * oneTemHeight - 5;
@@ -219,8 +209,8 @@ class _futureWeatherPainter extends CustomPainter {
 
   // 设置最高气温，最低气温
   void setMinMax(){
-    minTem = maxTem = int.parse(dailys.forecast[0].tempDay);
-    for(Forecast daily in dailys.forecast){
+    minTem = maxTem = int.parse(dailys[0].tempDay);
+    for(Forecast daily in dailys){
       if(int.parse(daily.tempDay) > maxTem){
         maxTem = int.parse(daily.tempDay);
       }

@@ -3,9 +3,8 @@ import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class AirQuality extends StatefulWidget {
-  List<AQI> aqiArray;
-
-  AirQuality({this.aqiArray});
+  AQI aqi;
+  AirQuality({this.aqi});
 
   @override
   _AirQualityState createState() => _AirQualityState();
@@ -14,6 +13,17 @@ class AirQuality extends StatefulWidget {
 class _AirQualityState extends State<AirQuality> {
   @override
   Widget build(BuildContext context) {
+    Map<String, Map> map = widget.aqi.toJson();
+    Map<String, String> nmap = map["aqi"];
+    List<Map<String, String>> items = List(nmap.keys.length);
+    for(int i = 0; i < nmap.keys.length; i++){
+      String key = nmap.keys.elementAt(i);
+      String value = nmap.values.elementAt(i);
+      Map<String, String> temp = Map();
+      temp[key] = value;
+      items.add(temp);
+    }
+
     double screenW = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
