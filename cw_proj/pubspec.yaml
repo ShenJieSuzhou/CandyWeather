@@ -63,6 +63,36 @@ flutter:
     - assets/Config/Locations.json
     - assets/weatherIcons/W0.png
     - assets/weatherIcons/W1.png
+    - assets/weatherIcons/W2.png
+    - assets/weatherIcons/W3.png
+    - assets/weatherIcons/W4.png
+    - assets/weatherIcons/W5.png
+    - assets/weatherIcons/W6.png
+    - assets/weatherIcons/W7.png
+    - assets/weatherIcons/W8.png
+    - assets/weatherIcons/W9.png
+    - assets/weatherIcons/W10.png
+    - assets/weatherIcons/W13.png
+    - assets/weatherIcons/W14.png
+    - assets/weatherIcons/W15.png
+    - assets/weatherIcons/W16.png
+    - assets/weatherIcons/W17.png
+    - assets/weatherIcons/W18.png
+    - assets/weatherIcons/W19.png
+    - assets/weatherIcons/W20.png
+    - assets/weatherIcons/W29.png
+    - assets/weatherIcons/W30.png
+    - assets/weatherIcons/W31.png
+    - assets/weatherIcons/W32.png
+    - assets/weatherIcons/W33.png
+    - assets/weatherIcons/W34.png
+    - assets/weatherIcons/W35.png
+    - assets/weatherIcons/W36.png
+    - assets/weatherIcons/W44.png
+    - assets/weatherIcons/W45.png
+    - assets/weatherIcons/W46.png
+
+
 
   fonts:
     - family: iconfont
