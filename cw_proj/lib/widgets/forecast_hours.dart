@@ -3,6 +3,9 @@ import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class ForcastHours extends StatefulWidget {
+  final Hours hours;
+  const ForcastHours({Key key, this.hours}) : super(key: key);
+
   @override
   _ForcastHoursState createState() => _ForcastHoursState();
 }
@@ -12,9 +15,10 @@ class _ForcastHoursState extends State<ForcastHours> {
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
 
-    List<Widget> widgets = [];
-    for(int i = 0; i < 12; i++){
-      widgets.add(_getHourItem(null));
+    List<Widget> widgetlist = [];
+    for(int i = 0; i < widget.hours.hourly.length; i++){
+      Hourly hourly = widget.hours.hourly[i];
+      widgetlist.add(_getHourItem(hourly));
     }
 
     return Container(
@@ -31,7 +35,7 @@ class _ForcastHoursState extends State<ForcastHours> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: widgets,
+              children: widgetlist,
             ),
           ),
         )
@@ -40,7 +44,7 @@ class _ForcastHoursState extends State<ForcastHours> {
   }
 
   //小时天气的item
-Widget _getHourItem(Hours hourly) {
+Widget _getHourItem(Hourly hourly) {
   return Container(
     height: 130,
     width: 60,
@@ -49,7 +53,7 @@ Widget _getHourItem(Hours hourly) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          "14:00",
+          hourly.hour + ":00",
           style: TextStyle(color: Colors.black, fontSize: 12),
         ),
         SizedBox(
@@ -57,18 +61,26 @@ Widget _getHourItem(Hours hourly) {
         ),
         Image(
           image:
-              AssetImage("assets/weatherIcons/W0.png"),
+                isDayTime(int.parse(hourly.hour)) ? AssetImage("assets/weatherIcons/W" + hourly.iconDay + ".png"):AssetImage("assets/weatherIcons/W" + hourly.iconNight + ".png"),
           height: 30,
         ),
         SizedBox(
           height: 20,
         ),
         Text(
-          "12℃",
+          hourly.temp + "℃",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ],
     ),
   );
 }
+
+  bool isDayTime(int hour){
+    if(hour >= 6 && hour <= 24){
+      return true;
+    }
+
+    return false;
+  }
 }

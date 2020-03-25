@@ -3,7 +3,7 @@ import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class AirQuality extends StatefulWidget {
-  AQI aqi;
+  final AQI aqi;
   AirQuality({this.aqi});
 
   @override
@@ -37,11 +37,77 @@ class _AirQualityState extends State<AirQuality> {
             crossAxisCount: 3,
             childAspectRatio: 1.0,
           ),
-          itemCount: 15,
+          itemCount: 12,//items.length,
           itemBuilder: (context, index){
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-              child: cube('空气质量', '良', '99'),
+            if(items[index].containsKey("value")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('空气质量', '良', items[index]["value"]),
+              );
+            }else if(items[index].containsKey("co")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('一氧化碳', 'co', items[index]["co"]),
+              );
+            }else if(items[index].containsKey("no2")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('二氧化氮', 'no2', items[index]["no2"]),
+              );
+            }else if(items[index].containsKey("o3")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('臭氧', 'o3', items[index]["o3"]),
+              );
+            }else if(items[index].containsKey("pm10")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('PM10指数', 'pm10', items[index]["pm10"]),
+              );
+            }else if(items[index].containsKey("pm25")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('PM2.5指数', 'pm25', items[index]["pm25"]),
+              );
+            }else if(items[index].containsKey("so2")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('二氧化硫', 'so2', items[index]["so2"]),
+              );
+            }else if(items[index].containsKey("pm25C")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('PM2.5浓度', 'pm25C', items[index]["pm25C"]),
+              );
+            }else if(items[index].containsKey("coC")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('一氧化碳浓度', 'coC', items[index]["coC"]),
+              );
+            }else if(items[index].containsKey("no2C")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('二氧化氮浓度', 'no2C', items[index]["no2C"]),
+              );
+            }else if(items[index].containsKey("o3C")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('臭氧浓度', 'o3C', items[index]["o3C"]),
+              );
+            }else if(items[index].containsKey("pm10C")){
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                child: cube('PM10浓度', 'pm10C', items[index]["pm10C"]),
+              );
+            }
+            // else if(items[index].containsKey("so2C")){
+            //   return Padding(
+            //     padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+            //     child: cube('二氧化硫浓度', 'so2C', items[index]["so2C"]),
+            //   );
+            // }
+            return SizedBox(
+              height: 0,
             );
           },
       ),

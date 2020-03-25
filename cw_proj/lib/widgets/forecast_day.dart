@@ -16,7 +16,7 @@ class ForcastDay extends StatefulWidget {
 }
 
 class _ForcastDayState extends State<ForcastDay> {
-  List<Forecast> dailys;
+  List<Forecast> dailys = [];
   List<ui.Image> dayIcons = [];
   List<ui.Image> nightIcons = [];
   bool imageLoaded = false;

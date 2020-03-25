@@ -23,6 +23,7 @@ class Hours {
 
 class Hourly {
   String condition;
+  String conditionId;
   String date;
   String hour;
   String humidity;
@@ -37,6 +38,7 @@ class Hourly {
 
   Hourly(
       {this.condition,
+      this.conditionId,
       this.date,
       this.hour,
       this.humidity,
@@ -51,6 +53,7 @@ class Hourly {
 
   Hourly.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
+    conditionId = json['conditionId'];
     date = json['date'];
     hour = json['hour'];
     humidity = json['humidity'];
@@ -67,6 +70,7 @@ class Hourly {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
+    data['conditionId'] = this.conditionId;
     data['date'] = this.date;
     data['hour'] = this.hour;
     data['humidity'] = this.humidity;

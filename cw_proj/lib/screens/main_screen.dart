@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
   // 天气数据
   Condition _condition;
   AQI _aqi;
-  Hourly _hour;
+  Hours _hour;
   Daily _daily;
   Live _live;
 
@@ -238,7 +238,7 @@ class _MainScreenState extends State<MainScreen> {
                                     ),
                                   );
                                 }else if(index == 2){
-                                  return ForcastHours();
+                                  return ForcastHours(hours: _hour,);
                                 }else if(index == 3){
                                   return AirQuality(aqi: _aqi,);
                                 }else if(index == 4){
