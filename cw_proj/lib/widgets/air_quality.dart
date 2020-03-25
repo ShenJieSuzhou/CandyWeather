@@ -13,11 +13,14 @@ class AirQuality extends StatefulWidget {
 class _AirQualityState extends State<AirQuality> {
   @override
   Widget build(BuildContext context) {
-    Map<String, Map> map = widget.aqi.toJson();
+    Map<String, dynamic> map = widget.aqi.toJson();
     Map<String, String> nmap = map["aqi"];
-    List<Map<String, String>> items = List(nmap.keys.length);
+    List<Map<String, String>> items = [];
     for(int i = 0; i < nmap.keys.length; i++){
       String key = nmap.keys.elementAt(i);
+      if((key == "pubtime") || (key == "rank") || (key == "so2C")){
+        continue;
+      }
       String value = nmap.values.elementAt(i);
       Map<String, String> temp = Map();
       temp[key] = value;
@@ -28,7 +31,7 @@ class _AirQualityState extends State<AirQuality> {
     return Padding(
       padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       child: Container(
-        height:(screenW-40)/3*5, 
+        height:(screenW-40)/3*4, 
         width:screenW,
         child: GridView.builder(
           physics: NeverScrollableScrollPhysics(),
@@ -115,8 +118,7 @@ class _AirQualityState extends State<AirQuality> {
     );
   }
 
-
-  Widget cube(String title, String value ,String extend){
+  Widget cube(String title, String extend, String value){
     bool isDark = ThemeUtils.isDark(context);
     return Container(
       decoration: BoxDecoration(

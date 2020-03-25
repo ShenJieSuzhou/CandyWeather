@@ -57,7 +57,7 @@ class AQI{
 
   Map<String, dynamic> toJson(){
     final Map<String, dynamic> aqi = Map<String, dynamic>();
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, String> data = Map<String, String>();
     data['co'] = this.co;
     data['coC'] = this.coC;
     data['no2'] = this.no2;

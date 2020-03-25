@@ -108,7 +108,7 @@ class _ForcastDayState extends State<ForcastDay> {
 
 class _futureWeatherPainter extends CustomPainter {
   _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth, );
-  List<Forecast> dailys;
+  final List<Forecast> dailys;
   final List<ui.Image> dayIcons;
   final List<ui.Image> nightIcons;
   final double itemWidth;
