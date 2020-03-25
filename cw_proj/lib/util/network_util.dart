@@ -71,7 +71,7 @@ import 'package:cw_proj/Model/base_entity.dart';
     bodys['token'] = '5944a84ec4a071359cc4f6928b797f91';
 
 
-    BaseEntity<Live> result = await DioUtils.instance.requestMJData<Live>(Method.post, "index",queryParameters: bodys);
+    BaseEntity<Live> result = await DioUtils.instance.requestMJData<Live>(Method.post, "index", queryParameters: bodys);
     return result.data;
     // return await DioUtils.instance.requestNetwork<Live>(Method.post, 'index', onSuccess: (data){
     //       print(data.toString());

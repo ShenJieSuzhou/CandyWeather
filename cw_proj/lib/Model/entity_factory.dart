@@ -16,7 +16,7 @@ class EntityFactory {
     } else if (T.toString() == 'Hours') {
       return Hours.fromJson(json) as T;
     } else if (T.toString() == 'Live') {
-      Live.fromJson(json);
+      return Live.fromJson(json) as T;
     } else {
       return null;
     }

@@ -115,23 +115,18 @@ class _MainScreenState extends State<MainScreen> {
 
   // 获取天气数据
     Future fetchWeatherData(String cityID) async {
-    return Future.wait([fetchCondition(cityID),
+    return Future.wait([
+      fetchCondition(cityID),
       fetchAQI(cityID),
       fetchHours(cityID),
       fetchDailys(cityID),
-      // fetchLiveIndex(cityID)
+      fetchLiveIndex(cityID)
     ]).then((results){
-        print('Condition:' + results[0].toString());
-        print('aqi:' + results[1].toString());
-        print('Hours:' + results[2].toString());
-        print('Dailys:' + results[3].toString());
-        // print('Liveindex:' + results[4].toString());
-
         _condition = results[0];
         _aqi = results[1];
         _hour = results[2];
         _daily = results[3];
-        // _live = results[4];
+        _live = results[4];
     });
   }
 
