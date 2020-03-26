@@ -13,7 +13,7 @@ class _CityScreenState extends State<CityScreen> {
       appBar: AppBar(
         elevation: 0.0,
         leading: IconButton(
-          icon: Icon(Icons.edit),
+          icon: Icon(Icons.add),
           onPressed: (){
             print("编辑天气卡包");
           },
