@@ -237,7 +237,7 @@ class _MainScreenState extends State<MainScreen> {
                                 }else if(index == 3){
                                   return AirQuality(aqi: _aqi,);
                                 }else if(index == 4){
-                                  return LiveIndex();
+                                  return LiveIndex(live: _live);
                                 }
                                 return Container(
 

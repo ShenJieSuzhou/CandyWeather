@@ -3,7 +3,9 @@ import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class LiveIndex extends StatefulWidget {
-  Live live;
+  final Live live;
+
+  const LiveIndex({Key key, this.live}) : super(key: key);
   @override
   _LiveIndexState createState() => _LiveIndexState();
 }
@@ -11,8 +13,8 @@ class LiveIndex extends StatefulWidget {
 class _LiveIndexState extends State<LiveIndex> {
   @override
   Widget build(BuildContext context) {
-    double screenW = MediaQuery.of(context).size.width;
-    double screenH = MediaQuery.of(context).size.height;
+    // double screenW = MediaQuery.of(context).size.width;
+    // double screenH = MediaQuery.of(context).size.height;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -20,11 +22,11 @@ class _LiveIndexState extends State<LiveIndex> {
         child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: 5,
+          itemCount: widget.live.liveIndex.length,
           itemBuilder: (context, index){
             return Padding(
               padding: EdgeInsets.fromLTRB(0, 0.0, 0, 0.0),
-              child: indexBoard('化妆指数', '3', '保湿', '天气寒冷，多补水，选用滋润保湿型化妆品，使用润唇膏。'),
+              child: indexBoard(widget.live.liveIndex[index].code, widget.live.liveIndex[index].name, '', widget.live.liveIndex[index].status, widget.live.liveIndex[index].desc),
             );
           },
         ),
@@ -32,18 +34,20 @@ class _LiveIndexState extends State<LiveIndex> {
     );
   }
 
-  Widget indexBoard(String name, String level, String status, String desc){
+  Widget indexBoard(int code, String name, String level, String status, String desc){ 
     bool isDark = ThemeUtils.isDark(context);
     return Card(
       color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
       child: ListTile(
-        leading: Icon(Icons.code),
+        leading: Image(
+          image: getLiveIndexIcon(code),),
         title: Text('$name level:$level'),
         subtitle: Text('$desc'),
         trailing: Text('$status'),
       ),
     );
 
+  
     // return Container(
     //   decoration: BoxDecoration(
     //     shape: BoxShape.rectangle,
@@ -57,5 +61,26 @@ class _LiveIndexState extends State<LiveIndex> {
     //     trailing: Text('$status'),
     //   ),
     // );
+  }
+
+  AssetImage getLiveIndexIcon(int code){
+    if(code == 7){
+      // 化妆
+    }else if(code == 12){
+       // 感冒
+    }else if(code == 17){
+      // 洗车
+    }else if(code == 18){
+      // 空气污染
+    }else if(code == 20){
+      // 穿衣指数
+    }else if(code == 21){
+      // 紫外线
+    }else if(code == 26){
+      // 运动
+    }else if(code == 28){
+      // 钓鱼
+    }
+    return AssetImage("assets/weatherIcons/W0.png");
   }
 }

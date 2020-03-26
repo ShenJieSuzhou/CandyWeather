@@ -25,14 +25,16 @@ class Live {
 }
 
 class LiveIndexs {
+  int code;
   String day;
   String desc;
   String name;
   String status;
 
-  LiveIndexs({this.day, this.desc, this.name, this.status});
+  LiveIndexs({this.code,this.day, this.desc, this.name, this.status});
 
   LiveIndexs.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
     day = json['day'];
     desc = json['desc'];
     name = json['name'];
@@ -41,6 +43,7 @@ class LiveIndexs {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
     data['day'] = this.day;
     data['desc'] = this.desc;
     data['name'] = this.name;
