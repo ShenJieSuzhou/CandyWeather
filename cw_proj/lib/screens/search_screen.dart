@@ -1,8 +1,7 @@
-import 'dart:js';
+import 'package:cw_proj/util/cityidlist.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:cw_proj/Model/data_key_bean.dart';
 import 'package:cw_proj/Model/data_key_bean.dart';
 
 
@@ -24,7 +23,7 @@ class searchBarDelegate extends SearchDelegate<String>{
   @override
   Widget buildLeading(BuildContext context) {
     // TODO: implement buildLeading
-    return IconButton(icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: null), onPressed: (){
+    return IconButton(icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation), onPressed: (){
       close(context, null);
     });
   }
@@ -49,7 +48,6 @@ class searchBarDelegate extends SearchDelegate<String>{
         }
       );
     }
-    
   }
 
   FutureBuilder<KeyBean> buildDefaultFutureBuilder() {
@@ -107,7 +105,16 @@ class searchBarDelegate extends SearchDelegate<String>{
               child: Text('Error:code'),
             );
           } else if (async.hasData){
-            return null;
+            List<Record> records = async.data;
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index){
+              String name = records[index].name;
+              return ListTile(title: Text("$name"));
+            }, 
+            separatorBuilder: (BuildContext context, int index) {
+              return Divider(color: Colors.blue,);
+            }, 
+            itemCount: records.length);
           }
         }
       },
@@ -115,13 +122,9 @@ class searchBarDelegate extends SearchDelegate<String>{
     );
   }
 
-  Future getSearchData(String key) async {
-
-
-
-    return null;
+  Future<List<Record>> getSearchData(String key) async {
+    return CityListUtil.getSearchResults(key);
   }
-  
 }
 
 class SearchDefaultView extends StatelessWidget {
@@ -159,7 +162,7 @@ class SearchDefaultItemView extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              '大家都在搜',
+              '热门城市',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -178,7 +181,7 @@ class SearchDefaultItemView extends StatelessWidget {
                 return GestureDetector(
                   child: new ClipRRect(
                     child: Container(
-                      padding: EdgeInsets.all(3.0),
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                         childNode.name,
                         style: TextStyle(
@@ -190,8 +193,8 @@ class SearchDefaultItemView extends StatelessWidget {
                     borderRadius: new BorderRadius.circular(3.0),
                   ),
                   onTap: () {
-                    // debugPrint('onTap key-> ${childNode.getName()}');
-                    // callback(childNode.getName());
+                    debugPrint('onTap key-> ${childNode.name}');
+                    callback(childNode.name);
                   },
                 );
               }).toList(),
