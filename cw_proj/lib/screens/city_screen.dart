@@ -1,3 +1,4 @@
+import 'package:cw_proj/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cw_proj/widgets/CityBriefCard.dart';
 
@@ -15,7 +16,7 @@ class _CityScreenState extends State<CityScreen> {
         leading: IconButton(
           icon: Icon(Icons.add),
           onPressed: (){
-            print("编辑天气卡包");
+            showSearch(context: context, delegate: searchBarDelegate());
           },
         ),
         title: Text("天气卡包"),

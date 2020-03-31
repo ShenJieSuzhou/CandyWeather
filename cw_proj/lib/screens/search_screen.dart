@@ -1,0 +1,204 @@
+import 'dart:js';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:cw_proj/Model/data_key_bean.dart';
+import 'package:cw_proj/Model/data_key_bean.dart';
+
+
+List<HotCitys> nodes = [];
+
+class searchBarDelegate extends SearchDelegate<String>{
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    return [
+      IconButton(icon: Icon(Icons.clear), onPressed: (){
+        query = "";
+        showSuggestions(context);
+      },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    return IconButton(icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: null), onPressed: (){
+      close(context, null);
+    });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return buildSearchFutureBuilder(query);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    if(nodes.length == 0){
+      return buildDefaultFutureBuilder();
+    } else {
+      return SearchDefaultView(
+        nodes: nodes,
+        callback: (key) {
+          query = key;
+          showResults(context);
+        }
+      );
+    }
+    
+  }
+
+  FutureBuilder<KeyBean> buildDefaultFutureBuilder() {
+    return FutureBuilder<KeyBean>(
+      builder: (context, AsyncSnapshot<KeyBean> async){
+        if (async.connectionState == ConnectionState.active || 
+        async.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: Text("Waiting..."),
+          );
+        }
+
+        if (async.connectionState == ConnectionState.done) {
+          if (async.hasError) {
+            return Center(
+              child: Text("error:code"),
+            );
+          } else if (async.hasData) {
+            KeyBean bean = async.data;
+            nodes = bean.hotCitys;
+            
+            return SearchDefaultView(
+              nodes: nodes,
+              callback: (key) {
+                query = key;
+                showResults(context);
+              }
+            );
+          }
+        }
+      },
+      future: getHotCity(),
+      );
+  }
+
+  // 热门城市
+  Future<KeyBean> getHotCity() async {
+    final result =  await rootBundle.loadString('assets/Config/HotCitys.json');
+    return KeyBean.fromJson(json.decode(result));
+  }
+
+  FutureBuilder buildSearchFutureBuilder(String key){
+    return FutureBuilder(
+      builder: (context, AsyncSnapshot async){
+        if (async.connectionState == ConnectionState.active ||
+        async.connectionState == ConnectionState.waiting ) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (async.connectionState == ConnectionState.done) {
+          if (async.hasError) {
+            return Center(
+              child: Text('Error:code'),
+            );
+          } else if (async.hasData){
+            return null;
+          }
+        }
+      },
+      future: getSearchData(key),
+    );
+  }
+
+  Future getSearchData(String key) async {
+
+
+
+    return null;
+  }
+  
+}
+
+class SearchDefaultView extends StatelessWidget {
+  final List<HotCitys> nodes;
+  final callback;
+
+  SearchDefaultView({this.nodes, this.callback});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        SearchDefaultItemView(
+          nodes: nodes,
+          callback: callback,
+        ),
+      ],
+    );
+  }
+}
+
+class SearchDefaultItemView extends StatelessWidget {
+  final List<HotCitys> nodes;
+  final callback;
+
+  SearchDefaultItemView({this.nodes, this.callback});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '大家都在搜',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: 10.0,
+            ),
+            alignment: Alignment.centerLeft,
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: nodes.map((childNode) {
+                return GestureDetector(
+                  child: new ClipRRect(
+                    child: Container(
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                        childNode.name,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: Colors.blue,
+                    ),
+                    borderRadius: new BorderRadius.circular(3.0),
+                  ),
+                  onTap: () {
+                    // debugPrint('onTap key-> ${childNode.getName()}');
+                    // callback(childNode.getName());
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
