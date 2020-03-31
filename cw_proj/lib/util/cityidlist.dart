@@ -19,6 +19,7 @@ class CityListUtil{
   // }
 
   static List<Record> getSearchResults(String key){
+    nodes.clear();
     var document = xml.parse(citylistXml);
     List<Record> titles = document.findAllElements("RECORD")
     .map<Record>((node) => Record(fid: node.findElements("Fid").first.text, 
@@ -37,7 +38,6 @@ class CityListUtil{
     }
     return nodes;
   }
-
 
 static var citylistXml = '''<?xml version="1.0"?>
 <RECORDS>

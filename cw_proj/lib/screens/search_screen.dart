@@ -68,7 +68,6 @@ class searchBarDelegate extends SearchDelegate<String>{
           } else if (async.hasData) {
             KeyBean bean = async.data;
             nodes = bean.hotCitys;
-            
             return SearchDefaultView(
               nodes: nodes,
               callback: (key) {
@@ -193,7 +192,8 @@ class SearchDefaultItemView extends StatelessWidget {
                     borderRadius: new BorderRadius.circular(3.0),
                   ),
                   onTap: () {
-                    debugPrint('onTap key-> ${childNode.name}');
+                    // debugPrint('onTap key-> ${childNode.name}');
+                    print('onTap key-> ${childNode.name}');
                     callback(childNode.name);
                   },
                 );
