@@ -3,11 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:cw_proj/Model/data_key_bean.dart';
+import 'package:cw_proj/provider/theme_provider.dart';
+import 'package:cw_proj/util/theme_utils.dart';
 
 
 List<HotCitys> nodes = [];
 
 class searchBarDelegate extends SearchDelegate<String>{
+  @override
+  String get searchFieldLabel => "搜索全球热门城市";
+
   @override
   List<Widget> buildActions(BuildContext context) {
     // TODO: implement buildActions
@@ -48,6 +53,13 @@ class searchBarDelegate extends SearchDelegate<String>{
         }
       );
     }
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    bool isDark = ThemeUtils.isDark(context);
+    ThemeProvider provider = ThemeProvider();
+    return provider.getTheme(isDarkMode: isDark);
   }
 
   FutureBuilder<KeyBean> buildDefaultFutureBuilder() {
