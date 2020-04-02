@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:cw_proj/Model/data_key_bean.dart';
 import 'package:cw_proj/provider/theme_provider.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/bus/custom_event_bus.dart';
 
 
 List<HotCitys> nodes = [];
@@ -120,12 +121,17 @@ class searchBarDelegate extends SearchDelegate<String>{
             return ListView.separated(
               itemBuilder: (BuildContext context, int index){
               String name = records[index].name;
-              return ListTile(title: Text("$name"));
+              String fid = records[index].fid;
+              return ListTile(title: Text("$name"), onTap: (){
+                bus.emit("addCity", fid);
+                close(context, null);
+              },);
             }, 
             separatorBuilder: (BuildContext context, int index) {
               return Divider(color: Colors.blue,);
             }, 
-            itemCount: records.length);
+            itemCount: records.length,
+            );
           }
         }
       },
@@ -204,9 +210,8 @@ class SearchDefaultItemView extends StatelessWidget {
                     borderRadius: new BorderRadius.circular(3.0),
                   ),
                   onTap: () {
-                    // debugPrint('onTap key-> ${childNode.name}');
-                    print('onTap key-> ${childNode.name}');
                     callback(childNode.name);
+                    // bus.emit("addCity", childNode.id);
                   },
                 );
               }).toList(),

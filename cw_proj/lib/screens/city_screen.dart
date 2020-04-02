@@ -1,6 +1,7 @@
 import 'package:cw_proj/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cw_proj/widgets/CityBriefCard.dart';
+import 'package:cw_proj/bus/custom_event_bus.dart';
 
 class CityScreen extends StatefulWidget {
   @override
@@ -10,6 +11,10 @@ class CityScreen extends StatefulWidget {
 class _CityScreenState extends State<CityScreen> {
   @override
   Widget build(BuildContext context) {
+    bus.on("addCity", (arg) {
+      print(arg);
+    });
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
