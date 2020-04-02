@@ -123,7 +123,7 @@ class searchBarDelegate extends SearchDelegate<String>{
               String name = records[index].name;
               String fid = records[index].fid;
               return ListTile(title: Text("$name"), onTap: (){
-                bus.emit("addCity", fid);
+                bus.emit("addCity", records[index]);
                 close(context, null);
               },);
             }, 

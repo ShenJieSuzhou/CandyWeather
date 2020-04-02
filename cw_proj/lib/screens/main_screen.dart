@@ -114,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 获取天气数据
-    Future fetchWeatherData(String cityID) async {
+  Future fetchWeatherData(String cityID) async {
     return Future.wait([
       fetchCondition(cityID),
       fetchAQI(cityID),
