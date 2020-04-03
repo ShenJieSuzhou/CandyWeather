@@ -4,10 +4,11 @@ import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/Model/condition.dart';
 
 class WeatherInfo extends StatefulWidget {
+  final String cityName;
   final Condition condition;
 
   WeatherInfo({
-    @required this.condition
+    @required this.condition, this.cityName
   });
 
   @override
@@ -16,7 +17,6 @@ class WeatherInfo extends StatefulWidget {
 
 class _WeatherInfoState extends State<WeatherInfo> {
   
-
   Widget realTimeWeather(double width, bool isDark, Condition condition, String location){
     return Padding(
       padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), 10.0),
@@ -170,7 +170,7 @@ class _WeatherInfoState extends State<WeatherInfo> {
             children: <Widget>[
               Container(
                 height: ScreenUtil().setHeight(310),
-                child: realTimeWeather(width, isDark, widget.condition, "苏州"),
+                child: realTimeWeather(width, isDark, widget.condition, widget.cityName),
               ),
               SizedBox(
                 height: ScreenUtil().setWidth(10),
