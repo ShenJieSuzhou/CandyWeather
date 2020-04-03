@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:cw_proj/Model/SelLocations.dart';
+import 'package:cw_proj/Model/data_key_bean.dart';
 
-Future<SelLocations> fetchCity() async{
-  final result =  await rootBundle.loadString('assets/Config/Locations.json');
-  return SelLocations.fromJson(json.decode(result));
+Future<HomeBean> fetchCity() async{
+  final result =  await rootBundle.loadString('assets/Config/SelectedCitys.json');
+  return HomeBean.fromJson(json.decode(result));
 }
 
 // Future<SelLocations> fetchMyCity() async{ 

@@ -1,4 +1,5 @@
 import 'package:cw_proj/Model/condition.dart';
+import 'package:cw_proj/Model/data_key_bean.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui' as ui show Image;
@@ -20,7 +21,6 @@ import 'package:cw_proj/widgets/live_index.dart';
 import 'package:cw_proj/widgets/weather_card.dart';
 
 import 'package:cw_proj/Model/daily.dart';
-import 'package:cw_proj/Model/SelLocations.dart';
 import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/Model/live.dart';
@@ -42,7 +42,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   PageController _pageController = PageController(initialPage: 0);
   int _pageCount;
-  Future<SelLocations> citys;
+  HomeBean citys;
 
   bool assetsLoaded = false;
   WeatherWorld weatherWorld;
@@ -79,8 +79,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  void initState() {
-    _futureBuilderFuture = fetchWeatherData('2');
+  void initState() { 
+    // 加载配置文件
+    fetchCity().then((value){
+      citys = value;  
+      _futureBuilderFuture = fetchWeatherData(citys.record);
+    });
+
     super.initState();
 
     //监听滚动事件，打印滚动位置
@@ -99,22 +104,20 @@ class _MainScreenState extends State<MainScreen> {
       }
     });
  
-    // 获取 rootbundle
-    AssetBundle bundle = rootBundle;
-    // 加载天气图形
-    _loadAssets(bundle).then((_){
-      setState(() {
-        assetsLoaded = true;
-        weatherWorld = new WeatherWorld();
-      });
-    });
-
-    // 加载配置文件
-    citys = fetchCity();    
+    // // 获取 rootbundle
+    // AssetBundle bundle = rootBundle;
+    // // 加载天气图形
+    // _loadAssets(bundle).then((_){
+    //   setState(() {
+    //     assetsLoaded = true;
+    //     weatherWorld = new WeatherWorld();
+    //   });
+    // });   
   }
 
   // 获取天气数据
-  Future fetchWeatherData(String cityID) async {
+  Future fetchWeatherData(List<Record> records) async {
+    String cityID = records[0].fid;
     return Future.wait([
       fetchCondition(cityID),
       fetchAQI(cityID),
@@ -127,6 +130,10 @@ class _MainScreenState extends State<MainScreen> {
         _hour = results[2];
         _daily = results[3];
         _live = results[4];
+
+        setState(() {
+          
+        });
     });
   }
 
@@ -137,7 +144,6 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-
   void onPageChanged(int index){
     setState(() {});
 
@@ -146,10 +152,6 @@ class _MainScreenState extends State<MainScreen> {
   void setPageCount(int count){
     this._pageCount = count;
   }
-
-  // void setInitialPage(int initPage){
-  //   this._initialPage = initPage;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +165,13 @@ class _MainScreenState extends State<MainScreen> {
     double appBarHeight = _appBar.preferredSize.height;
 
     criticalH = screenHeight - appBarHeight - statusBarHeight;
-    return Scaffold(
+    if(_futureBuilderFuture == null){
+      return Scaffold(
+        appBar: _appBar,
+        body: Text("loading"),
+      );
+    } else {
+      return Scaffold(
         appBar: _appBar,
         body: FutureBuilder(
           future: _futureBuilderFuture,
@@ -265,6 +273,8 @@ class _MainScreenState extends State<MainScreen> {
           }
       ),
     );
+    }
+    
   }
 
 
@@ -281,7 +291,7 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.push(context, PageRouteBuilder(
                   opaque: false,
                   pageBuilder: (BuildContext context, _, __) {
-                    return CityScreen();
+                    return CityScreen(selectedCitys: citys.record,);
                   },
                   
                   transitionsBuilder: (_, Animation<double> animation, Animation<double> animation1, Widget child){

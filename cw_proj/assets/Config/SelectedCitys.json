@@ -1,12 +1,20 @@
 {
-    "selectedCitys":[
+    "Record":[
         {
-            "Fid":"1098",
+            "fid":"1098",
             "name":"吴中区",
             "name_en":"Wuzhong District",
             "name_py":"wuzhongqu",
-            "Fprovince_cn":"江苏省",
-            "Fweathercn":"101190405"
+            "f_province_cn":"江苏省",
+            "f_weathercn":"101190405"
+        },
+        {
+            "fid":"1100",
+            "name":"常熟市",
+            "name_en":"Changshu",
+            "name_py":"changshushi",
+            "f_province_cn":"江苏省",
+            "f_weathercn":"101190402"
         }
     ]
 }
