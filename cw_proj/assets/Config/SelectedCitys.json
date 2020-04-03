@@ -15,6 +15,14 @@
             "name_py":"changshushi",
             "f_province_cn":"江苏省",
             "f_weathercn":"101190402"
+        },
+        {
+            "fid":"2",
+            "name":"北京市",
+            "name_en":"Beijing",
+            "name_py":"beijingshi",
+            "f_province_cn":"北京市",
+            "f_weathercn":"101010100"
         }
     ]
 }

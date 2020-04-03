@@ -26,6 +26,7 @@ import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/Model/home_entity.dart';
 
+
 ImageMap _images;
 SpriteSheet _sprites;
 
@@ -41,6 +42,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
   PageController _pageController = PageController(initialPage: 0);
   
   // 自选城市
@@ -61,6 +63,11 @@ class _MainScreenState extends State<MainScreen> {
   Hours _hour;
   Daily _daily;
   Live _live;
+
+
+  GlobalKey<ForcastDayState> forcastDayKey = GlobalKey<ForcastDayState>();
+  GlobalKey<ForcastHoursState> forcastHourKey = GlobalKey<ForcastHoursState>();
+
 
   List<HomeEntity> homeEntityList = [];
 
@@ -155,8 +162,10 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  void onPageChanged(int index){
-    
+  void onPageChanged(int index){  
+    HomeEntity entity = homeEntityList[index];
+    forcastDayKey.currentState.refresh(entity.daily);
+
   }
 
   void setPageCount(int count){
@@ -238,15 +247,15 @@ class _MainScreenState extends State<MainScreen> {
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.all(Radius.circular(8)),
                               ),
-                              child: ForcastDay(weatherResult: _daily),
+                              child: ForcastDay(key:forcastDayKey, weatherResult: homeEntityList[0].daily,)
                             ),
                           );
                         }else if(index == 2){
-                          return ForcastHours(hours: _hour,);
+                          return ForcastHours(hours: homeEntityList[0].hour,);
                         }else if(index == 3){
-                          return AirQuality(aqi: _aqi,);
+                          return AirQuality(aqi: homeEntityList[0].aqi,);
                         }else if(index == 4){
-                          return LiveIndex(live: _live);
+                          return LiveIndex(live: homeEntityList[0].live);
                         }
                         return Container(
 
@@ -318,11 +327,8 @@ class _MainScreenState extends State<MainScreen> {
         ],
       );
   }
-
-
-
-
 }
+
 
 // For the different weathers we are displaying different gradient backgrounds,
 // these are the colors for top and bottom.

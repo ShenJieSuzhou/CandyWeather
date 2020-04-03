@@ -7,10 +7,10 @@ class ForcastHours extends StatefulWidget {
   const ForcastHours({Key key, this.hours}) : super(key: key);
 
   @override
-  _ForcastHoursState createState() => _ForcastHoursState();
+  ForcastHoursState createState() => ForcastHoursState();
 }
 
-class _ForcastHoursState extends State<ForcastHours> {
+class ForcastHoursState extends State<ForcastHours> {
   @override
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);

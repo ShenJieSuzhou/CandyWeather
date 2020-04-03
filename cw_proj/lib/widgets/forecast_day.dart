@@ -9,13 +9,15 @@ import 'dart:typed_data';
 
 class ForcastDay extends StatefulWidget {
   final Daily weatherResult;
-  const ForcastDay({this.weatherResult});
+  const ForcastDay({Key key, this.weatherResult}) : super(key: key);
+  
 
   @override
-  _ForcastDayState createState() => _ForcastDayState();
+  ForcastDayState createState() => ForcastDayState();
 }
 
-class _ForcastDayState extends State<ForcastDay> {
+class ForcastDayState extends State<ForcastDay> {
+  
   List<Forecast> dailys = [];
   List<ui.Image> dayIcons = [];
   List<ui.Image> nightIcons = [];
@@ -103,6 +105,24 @@ class _ForcastDayState extends State<ForcastDay> {
       return completer.complete(img);
     });
     return completer.future;
+  }
+
+  void refresh(Daily w_result){
+    dailys.clear();
+    dayIcons.clear();
+    nightIcons.clear();
+
+    for(int i = 0; i < 7; i++){
+      Forecast forecast = w_result.forecast[i];
+      dailys.add(forecast);
+    }
+
+    Forecast forecast = w_result.forecast[0];
+    initDayImage("assets/weatherIcons/W" + forecast.conditionIdDay + ".png");
+    initNightImage("assets/weatherIcons/W" +forecast.conditionIdNight + ".png"); 
+    setState(() {
+      
+    });
   }
 }
 
