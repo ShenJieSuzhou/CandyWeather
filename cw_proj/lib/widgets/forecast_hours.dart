@@ -11,13 +11,28 @@ class ForcastHours extends StatefulWidget {
 }
 
 class ForcastHoursState extends State<ForcastHours> {
+  Hours _hours;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _hours =  widget.hours;
+  }
+  void refreshHours(Hours result){
+    _hours = result;
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
 
     List<Widget> widgetlist = [];
-    for(int i = 0; i < widget.hours.hourly.length; i++){
-      Hourly hourly = widget.hours.hourly[i];
+    for(int i = 0; i < _hours.hourly.length; i++){
+      Hourly hourly = _hours.hourly[i];
       widgetlist.add(_getHourItem(hourly));
     }
 

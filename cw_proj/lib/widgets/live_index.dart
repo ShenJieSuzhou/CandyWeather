@@ -3,14 +3,14 @@ import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class LiveIndex extends StatefulWidget {
-  final Live live;
+  Live live;
+  LiveIndex({Key key, this.live}) : super(key: key);
 
-  const LiveIndex({Key key, this.live}) : super(key: key);
   @override
-  _LiveIndexState createState() => _LiveIndexState();
+  LiveIndexState createState() => LiveIndexState();
 }
 
-class _LiveIndexState extends State<LiveIndex> {
+class LiveIndexState extends State<LiveIndex> {
   @override
   Widget build(BuildContext context) {
     // double screenW = MediaQuery.of(context).size.width;
@@ -82,5 +82,12 @@ class _LiveIndexState extends State<LiveIndex> {
       // 钓鱼
     }
     return AssetImage("assets/weatherIcons/W0.png");
+  }
+
+  void refreshLive(Live result){
+    widget.live = result;
+    setState(() {
+
+    });
   }
 }

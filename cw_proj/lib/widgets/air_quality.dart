@@ -3,14 +3,15 @@ import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 
 class AirQuality extends StatefulWidget {
-  final AQI aqi;
-  AirQuality({this.aqi});
+  AQI aqi;
+
+  AirQuality({Key key, this.aqi}) : super(key: key);
 
   @override
-  _AirQualityState createState() => _AirQualityState();
+  AirQualityState createState() => AirQualityState();
 }
 
-class _AirQualityState extends State<AirQuality> {
+class AirQualityState extends State<AirQuality> {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> map = widget.aqi.toJson();
@@ -145,5 +146,12 @@ class _AirQualityState extends State<AirQuality> {
         ],
       ),
     );
+  }
+
+  void refreshAQI(AQI result){
+    widget.aqi = result;
+    setState(() {
+
+    });
   }
 }

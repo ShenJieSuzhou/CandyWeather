@@ -1,21 +1,25 @@
+import 'package:cw_proj/Model/data_key_bean.dart';
+import 'package:cw_proj/util/network_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/Model/condition.dart';
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 class WeatherInfo extends StatefulWidget {
-  final String cityName;
   final Condition condition;
+  final String cityName;
 
-  WeatherInfo({
-    @required this.condition, this.cityName
-  });
+  WeatherInfo({Key key, this.condition, this.cityName}) : super(key: key);
 
   @override
-  _WeatherInfoState createState() => _WeatherInfoState();
+  WeatherInfoState createState() => WeatherInfoState();
 }
 
-class _WeatherInfoState extends State<WeatherInfo> {
+class WeatherInfoState extends State<WeatherInfo> {
+  bool isShowLoading = true;
+  Loading loading = Loading();
   
   Widget realTimeWeather(double width, bool isDark, Condition condition, String location){
     return Padding(
@@ -155,16 +159,16 @@ class _WeatherInfoState extends State<WeatherInfo> {
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
     double width = MediaQuery.of(context).size.width;
-    
+
     return Padding(
       padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
       child: InkWell(
         child: Container(
-         decoration: BoxDecoration(
-           shape: BoxShape.rectangle,
-           color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-           borderRadius: BorderRadius.all(Radius.circular(10)),
-         ),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -197,7 +201,70 @@ class _WeatherInfoState extends State<WeatherInfo> {
         },
       ),
     );
+
+//    return FutureBuilder(
+//        future: fetchCondition(cityId),
+//        builder: (BuildContext context, AsyncSnapshot snapshot) {
+//          // 请求已结束
+//          if (snapshot.connectionState == ConnectionState.done) {
+//            if (snapshot.hasError) {
+//              // 请求失败，显示错误
+//              return Text("Error: ${snapshot.error}");
+//            } else {
+//              // 请求成功，显示数据
+//              Condition condition = snapshot.data;
+//              return Padding(
+//                padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
+//                child: InkWell(
+//                  child: Container(
+//                    decoration: BoxDecoration(
+//                      shape: BoxShape.rectangle,
+//                      color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+//                      borderRadius: BorderRadius.all(Radius.circular(10)),
+//                    ),
+//                    child: Column(
+//                      crossAxisAlignment: CrossAxisAlignment.start,
+//                      children: <Widget>[
+//                        Container(
+//                          height: ScreenUtil().setHeight(310),
+//                          child: realTimeWeather(width, isDark, condition, widget.record.name),
+//                        ),
+//                        SizedBox(
+//                          height: ScreenUtil().setWidth(10),
+//                        ),
+//                        Container(
+//                          height: ScreenUtil().setHeight(420),
+//                          child: bingDeskPic(width, "assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg"),
+//                        ),
+//                        SizedBox(
+//                          height: ScreenUtil().setWidth(10),
+//                        ),
+//                        Container(
+//                          height: ScreenUtil().setHeight(200),
+//                          child: colorTheSoulWords(isDark),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                  onTap: (){
+//                    print("[weather card tap]");
+//                  },
+//                  onLongPress: (){
+//                    print("[weather card onLongPress]");
+//                  },
+//                ),
+//              );
+//            }
+//          } else {
+//            // 请求未结束，显示loading
+//            return Center(
+//              child: Loading(
+//                indicator: BallPulseIndicator(),
+//                size: 30.0,
+//                color: isDark? Colors.white : Colors.black,
+//              ),
+//            );
+//          }
+//        });
   }
-
-
 } 

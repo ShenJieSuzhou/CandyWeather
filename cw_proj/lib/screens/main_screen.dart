@@ -26,6 +26,8 @@ import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/Model/home_entity.dart';
 
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -42,7 +44,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
+  int _pageCount;
   PageController _pageController = PageController(initialPage: 0);
   
   // 自选城市
@@ -55,7 +57,7 @@ class _MainScreenState extends State<MainScreen> {
   bool allowJumpTo = false;
   double criticalH = 0.0;
 
-  var _futureBuilderFuture;
+  var _futureBuilderFuture = null;
 
   // 天气数据
   Condition _condition;
@@ -64,9 +66,15 @@ class _MainScreenState extends State<MainScreen> {
   Daily _daily;
   Live _live;
 
+  bool lockVertical = false;
+  bool lockHorization = false;
+
+  PageView homePageView;
 
   GlobalKey<ForcastDayState> forcastDayKey = GlobalKey<ForcastDayState>();
   GlobalKey<ForcastHoursState> forcastHourKey = GlobalKey<ForcastHoursState>();
+  GlobalKey<AirQualityState> aqiKey = GlobalKey<AirQualityState>();
+  GlobalKey<LiveIndexState> liveKey = GlobalKey<LiveIndexState>();
 
 
   List<HomeEntity> homeEntityList = [];
@@ -92,12 +100,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  void initState() { 
-    // 加载配置文件
-    fetchCity().then((value){
-      citys = value;  
+  void initState() {
+    // 若是初次打开APP，APP自动定位
 
-      for (var city in citys.record){
+    // 否则加载自选城市
+    fetchCity().then((value){
+      citys = value;
+      for (var city in citys.record) {
         fetchWeatherData(city);
       }
     });
@@ -129,7 +138,7 @@ class _MainScreenState extends State<MainScreen> {
     // });   
   }
 
-  // 获取天气数据
+  // 初始化首页天气数据
   Future fetchWeatherData(Record record) async {
     String cityID = record.fid;
     return Future.wait([
@@ -146,11 +155,10 @@ class _MainScreenState extends State<MainScreen> {
         _live = results[4];
         HomeEntity entity = HomeEntity(condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
         homeEntityList.add(entity);
-        if(homeEntityList.length == citys.record.length){
-          _futureBuilderFuture = homeEntityList;
+        if (homeEntityList.length == citys.record.length) {
           setState(() {
-
-          }); 
+            _futureBuilderFuture = homeEntityList;
+          });
         }
     });
   }
@@ -162,14 +170,17 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  void onPageChanged(int index){  
+  void onPageChanged(int index){
     HomeEntity entity = homeEntityList[index];
     forcastDayKey.currentState.refresh(entity.daily);
+    forcastHourKey.currentState.refreshHours(entity.hour);
+//    aqiKey.currentState.refreshAQI(entity.aqi);
+//    liveKey.currentState.refreshLive(entity.live);
 
   }
 
   void setPageCount(int count){
-    // this._pageCount = count;
+     this._pageCount = count;
   }
 
   @override
@@ -184,89 +195,95 @@ class _MainScreenState extends State<MainScreen> {
     double appBarHeight = _appBar.preferredSize.height;
 
     criticalH = screenHeight - appBarHeight - statusBarHeight;
-    if(_futureBuilderFuture == null){
+    if (_futureBuilderFuture == null) {
       return Scaffold(
         appBar: _appBar,
-        body: Text("loading"),
+        body: Center(
+              child: Loading(indicator: BallPulseIndicator(), size: 50.0),
+            )
       );
     } else {
       return Scaffold(
-        appBar: _appBar,
-        body: Material(
-              child: Stack(
-                children: <Widget>[
-                  // SpriteWidget(weatherWorld),
-                  Scrollbar(
-                      child: ListView.builder(
-                      itemCount: 6,
+          appBar: _appBar,
+          body: Material(
+            child: Stack(
+              children: <Widget>[
+                // SpriteWidget(weatherWorld),
+                Scrollbar(
+                  child: ListView.builder(
+                      itemCount: 2,
                       controller: _controller,
-                      itemBuilder: (context, index){
-                        if(index == 0){
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
                           return Container(
-                              height: screenHeight - appBarHeight - statusBarHeight,
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
+                            height: screenHeight - appBarHeight -
+                                statusBarHeight,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
                                     color: Colors.transparent,
                                     width: ScreenUtil.screenWidth,
                                     height: ScreenUtil().setHeight(180),
                                     child: HeaderContentView()
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(10),
+                                ),
+                                Container(
+                                  color: Colors.transparent,
+                                  width: ScreenUtil.screenWidth,
+                                  height: ScreenUtil().setHeight(950),
+                                  child: homePageView = PageView.builder(
+                                    onPageChanged: onPageChanged,
+                                    controller: _pageController,
+                                    itemBuilder: (context, index) {
+                                      String cityName = citys.record[index].name;
+                                      Condition condition = homeEntityList[index].condition;
+                                      return WeatherInfo(condition: condition, cityName: cityName,);
+                                    },
+                                    itemCount: citys.record.length,
                                   ),
-                                  SizedBox(
-                                    height: ScreenUtil().setHeight(10),
-                                  ),
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: ScreenUtil.screenWidth,
-                                    height: ScreenUtil().setHeight(950),
-                                    child: PageView.builder(
-                                      onPageChanged: onPageChanged,
-                                      controller: _pageController,
-                                      itemBuilder: (context, index){
-                                        String location = citys.record[index].name;
-                                        HomeEntity entity = homeEntityList[index];
-                                        return WeatherInfo(condition: entity.condition, cityName: location,);
-                                      },
-                                      itemCount: homeEntityList.length,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: ScreenUtil().setHeight(10),
-                                  ),
-                                ],
-                              ),
-                          );
-                        }else if(index == 1){
-                          return Padding(
-                            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                            child: Container(
-                              height: 350.0,
-                              width: ScreenUtil.screenWidth,
-                              decoration: BoxDecoration(
-                                color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: ForcastDay(key:forcastDayKey, weatherResult: homeEntityList[0].daily,)
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(10),
+                                ),
+                              ],
                             ),
                           );
-                        }else if(index == 2){
-                          return ForcastHours(hours: homeEntityList[0].hour,);
-                        }else if(index == 3){
-                          return AirQuality(aqi: homeEntityList[0].aqi,);
-                        }else if(index == 4){
-                          return LiveIndex(live: homeEntityList[0].live);
+                        } else if (index == 1) {
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                30.0, 10.0, 30.0, 10.0),
+                            child: Container(
+                                height: 350.0,
+                                width: ScreenUtil.screenWidth,
+                                decoration: BoxDecoration(
+                                  color: isDark ? Color(0xFF1c1c1e) : Color(
+                                      0xFFf5f5f5),
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(8)),
+                                ),
+                                child: ForcastDay(key: forcastDayKey,
+                                  weatherResult: homeEntityList[0].daily,)
+                            ),
+                          );
+                        } else if (index == 2) {
+                          return ForcastHours(key: forcastHourKey, hours: homeEntityList[0].hour,);
+                        } else if (index == 3) {
+                          return AirQuality(key:aqiKey, aqi: homeEntityList[0].aqi,);
+                        } else if (index == 4) {
+                          return LiveIndex(key:liveKey ,live: homeEntityList[0].live);
                         }
                         return Container(
 
                         );
                       }
-                    ),
                   ),
+                ),
               ],
             ),
-        ),
-      );
+          ));
     }
   }
 
