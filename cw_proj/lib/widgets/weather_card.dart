@@ -1,17 +1,23 @@
 import 'package:cw_proj/Model/data_key_bean.dart';
+import 'package:cw_proj/Model/home_entity.dart';
 import 'package:cw_proj/util/network_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/Model/condition.dart';
 import 'package:loading/loading.dart';
+import 'package:cw_proj/widgets/HeaderContentView.dart';
+import 'package:cw_proj/widgets/air_quality.dart';
+import 'package:cw_proj/widgets/forecast_day.dart';
+import 'package:cw_proj/widgets/forecast_hours.dart';
+import 'package:cw_proj/widgets/live_index.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 class WeatherInfo extends StatefulWidget {
-  final Condition condition;
+  final HomeEntity homeEntity;
   final String cityName;
 
-  WeatherInfo({Key key, this.condition, this.cityName}) : super(key: key);
+  WeatherInfo({Key key, this.homeEntity, this.cityName}) : super(key: key);
 
   @override
   WeatherInfoState createState() => WeatherInfoState();
@@ -159,48 +165,86 @@ class WeatherInfoState extends State<WeatherInfo> {
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
     double width = MediaQuery.of(context).size.width;
-
-    return Padding(
-      padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
-      child: InkWell(
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+    return Column(
+      children: <Widget>[
+      Container(
+          color: Colors.transparent,
+          width: ScreenUtil.screenWidth,
+          height: ScreenUtil().setHeight(180),
+          child: HeaderContentView()
+      ),
+      SizedBox(
+        height: ScreenUtil().setHeight(10),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
+        child: InkWell(
+          child: Container(
+            decoration: BoxDecoration(
+            shape: BoxShape.rectangle, color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                height: ScreenUtil().setHeight(310),
-                child: realTimeWeather(width, isDark, widget.condition, widget.cityName),
-              ),
-              SizedBox(
-                height: ScreenUtil().setWidth(10),
-              ),
-              Container(
-                height: ScreenUtil().setHeight(420),
-                child: bingDeskPic(width, "assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg"),
-              ),
-              SizedBox(
-                height: ScreenUtil().setWidth(10),
-              ),
-              Container(
-                height: ScreenUtil().setHeight(200),
-                child: colorTheSoulWords(isDark),
-              ),
-            ],
+                Container(
+                  height: ScreenUtil().setHeight(310),
+                  child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.cityName),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setWidth(10),
+                ),
+                Container(
+                  height: ScreenUtil().setHeight(420),
+                  child: bingDeskPic(width, "assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg"),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setWidth(10),
+                ),
+                Container(
+                  height: ScreenUtil().setHeight(200),
+                  child: colorTheSoulWords(isDark),
+                ),
+              ],
+            ),
+          ) ,
+          onTap: (){
+            print("[weather card tap]");
+          },
+          onLongPress: (){
+            print("[weather card onLongPress]");
+          },
           ),
         ),
-        onTap: (){
-          print("[weather card tap]");
-        },
-        onLongPress: (){
-          print("[weather card onLongPress]");
-        },
-      ),
+        SizedBox(
+          height: ScreenUtil().setHeight(10),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+              30.0, 10.0, 30.0, 10.0),
+          child: Container(
+              height: 350.0,
+              width: ScreenUtil.screenWidth,
+              decoration: BoxDecoration(
+                color: isDark ? Color(0xFF1c1c1e) : Color(
+                    0xFFf5f5f5),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(8)),
+              ),
+              child: ForcastDay(weatherResult: widget.homeEntity.daily,)
+          ),
+        ),
+        ForcastHours(hours: widget.homeEntity.hour,),
+        AirQuality(aqi: widget.homeEntity.aqi,),
+        LiveIndex(live: widget.homeEntity.live),
+      ],
     );
+
+
+
+
+
 
 //    return FutureBuilder(
 //        future: fetchCondition(cityId),

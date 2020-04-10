@@ -46,21 +46,6 @@ class LiveIndexState extends State<LiveIndex> {
         trailing: Text('$status'),
       ),
     );
-
-  
-    // return Container(
-    //   decoration: BoxDecoration(
-    //     shape: BoxShape.rectangle,
-    //     borderRadius: BorderRadius.all(Radius.circular(8)),
-    //     color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
-    //   ),
-    //   child: ListTile(
-    //     leading: Icon(Icons.code),
-    //     title: Text('$name level:$level'),
-    //     subtitle: Text('$desc'),
-    //     trailing: Text('$status'),
-    //   ),
-    // );
   }
 
   AssetImage getLiveIndexIcon(int code){
@@ -82,12 +67,5 @@ class LiveIndexState extends State<LiveIndex> {
       // 钓鱼
     }
     return AssetImage("assets/weatherIcons/W0.png");
-  }
-
-  void refreshLive(Live result){
-    widget.live = result;
-    setState(() {
-
-    });
   }
 }

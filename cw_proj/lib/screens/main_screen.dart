@@ -13,11 +13,6 @@ import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/screens/city_screen.dart';
 import 'package:cw_proj/screens/setting_screen.dart';
 
-import 'package:cw_proj/widgets/HeaderContentView.dart';
-import 'package:cw_proj/widgets/air_quality.dart';
-import 'package:cw_proj/widgets/forecast_day.dart';
-import 'package:cw_proj/widgets/forecast_hours.dart';
-import 'package:cw_proj/widgets/live_index.dart';
 import 'package:cw_proj/widgets/weather_card.dart';
 
 import 'package:cw_proj/Model/daily.dart';
@@ -65,17 +60,6 @@ class _MainScreenState extends State<MainScreen> {
   Hours _hour;
   Daily _daily;
   Live _live;
-
-  bool lockVertical = false;
-  bool lockHorization = false;
-
-  PageView homePageView;
-
-  GlobalKey<ForcastDayState> forcastDayKey = GlobalKey<ForcastDayState>();
-  GlobalKey<ForcastHoursState> forcastHourKey = GlobalKey<ForcastHoursState>();
-  GlobalKey<AirQualityState> aqiKey = GlobalKey<AirQualityState>();
-  GlobalKey<LiveIndexState> liveKey = GlobalKey<LiveIndexState>();
-
 
   List<HomeEntity> homeEntityList = [];
 
@@ -172,10 +156,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void onPageChanged(int index){
     HomeEntity entity = homeEntityList[index];
-    forcastDayKey.currentState.refresh(entity.daily);
-    forcastHourKey.currentState.refreshHours(entity.hour);
-//    aqiKey.currentState.refreshAQI(entity.aqi);
-//    liveKey.currentState.refreshLive(entity.live);
+
 
   }
 
@@ -194,7 +175,7 @@ class _MainScreenState extends State<MainScreen> {
     _appBar = createNaviBar();
     double appBarHeight = _appBar.preferredSize.height;
 
-    criticalH = screenHeight - appBarHeight - statusBarHeight;
+    criticalH = screenHeight - appBarHeight - statusBarHeight - 20;
     if (_futureBuilderFuture == null) {
       return Scaffold(
         appBar: _appBar,
@@ -210,80 +191,30 @@ class _MainScreenState extends State<MainScreen> {
               children: <Widget>[
                 // SpriteWidget(weatherWorld),
                 Scrollbar(
-                  child: ListView.builder(
-                      itemCount: 2,
-                      controller: _controller,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return Container(
-                            height: screenHeight - appBarHeight -
-                                statusBarHeight,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                    color: Colors.transparent,
-                                    width: ScreenUtil.screenWidth,
-                                    height: ScreenUtil().setHeight(180),
-                                    child: HeaderContentView()
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setHeight(10),
-                                ),
-                                Container(
-                                  color: Colors.transparent,
-                                  width: ScreenUtil.screenWidth,
-                                  height: ScreenUtil().setHeight(950),
-                                  child: homePageView = PageView.builder(
-                                    onPageChanged: onPageChanged,
-                                    controller: _pageController,
-                                    itemBuilder: (context, index) {
-                                      String cityName = citys.record[index].name;
-                                      Condition condition = homeEntityList[index].condition;
-                                      return WeatherInfo(condition: condition, cityName: cityName,);
-                                    },
-                                    itemCount: citys.record.length,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setHeight(10),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else if (index == 1) {
-                          return Padding(
-                            padding: EdgeInsets.fromLTRB(
-                                30.0, 10.0, 30.0, 10.0),
-                            child: Container(
-                                height: 350.0,
-                                width: ScreenUtil.screenWidth,
-                                decoration: BoxDecoration(
-                                  color: isDark ? Color(0xFF1c1c1e) : Color(
-                                      0xFFf5f5f5),
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(8)),
-                                ),
-                                child: ForcastDay(key: forcastDayKey,
-                                  weatherResult: homeEntityList[0].daily,)
-                            ),
-                          );
-                        } else if (index == 2) {
-                          return ForcastHours(key: forcastHourKey, hours: homeEntityList[0].hour,);
-                        } else if (index == 3) {
-                          return AirQuality(key:aqiKey, aqi: homeEntityList[0].aqi,);
-                        } else if (index == 4) {
-                          return LiveIndex(key:liveKey ,live: homeEntityList[0].live);
+                    child: ListView.builder(
+                        itemCount: 1,
+                        controller: _controller,
+                        itemBuilder: (context, index) {
+                          return  Container(
+                              color: Colors.transparent,
+                              width: ScreenUtil.screenWidth,
+                              height: ScreenUtil().setHeight(4200),
+                              child: PageView.builder(
+                                onPageChanged: onPageChanged,
+                                controller: _pageController,
+                                itemBuilder: (context, index) {
+                                  String cityName = citys.record[index].name;
+                                  HomeEntity entity = homeEntityList[index];
+                                  return WeatherInfo(homeEntity: entity, cityName: cityName,);
+                                },
+                                itemCount: citys.record.length,
+                              ));
                         }
-                        return Container(
-
-                        );
-                      }
-                  ),
-                ),
+                    )
+                )
               ],
-            ),
-          ));
+          ),
+      ));
     }
   }
 
