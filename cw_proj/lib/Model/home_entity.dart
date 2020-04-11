@@ -5,6 +5,7 @@ import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/Model/condition.dart';
 
 class HomeEntity {
+  String cityName;
   Condition condition;
   AQI aqi;
   Hours hour;
@@ -12,6 +13,7 @@ class HomeEntity {
   Live live;
 
   HomeEntity({
+    this.cityName,
     this.condition,
     this.aqi,
     this.hour,

@@ -2,13 +2,15 @@ import 'package:cw_proj/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cw_proj/screens/main_screen.dart';
+import 'package:cw_proj/common/global.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
-    runApp(MyApp());
-  });
+ WidgetsFlutterBinding.ensureInitialized();
+//  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
+   return Global.init().then((e) => runApp(MyApp()));
+//  });
+  
 }
 
 class MyApp extends StatefulWidget {
@@ -22,13 +24,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   // statusBarColor: isDark ? Constants.darkPrimary:Constants.lightPrimary,
-    //   // statusBarIconBrightness: isDark? Brightness.light:Brightness.dark,
-    //   statusBarColor: Colors.transparent,
-    //   statusBarIconBrightness: Brightness.light
-    // ));
   }
 
 

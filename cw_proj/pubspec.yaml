@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  shared_preferences: ^0.5.1
   grouped_list: ^1.2.1
   spritewidget:
   common_utils:
@@ -61,7 +62,6 @@ flutter:
     - assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg
     - assets/weathersprites.json
     - assets/weathersprites.png
-    - assets/Config/Locations.json
     - assets/weatherIcons/W0.png
     - assets/weatherIcons/W1.png
     - assets/weatherIcons/W2.png

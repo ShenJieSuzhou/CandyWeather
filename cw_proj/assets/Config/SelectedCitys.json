@@ -1,14 +1,6 @@
 {
     "Record":[
         {
-            "fid":"1098",
-            "name":"吴中区",
-            "name_en":"Wuzhong District",
-            "name_py":"wuzhongqu",
-            "f_province_cn":"江苏省",
-            "f_weathercn":"101190405"
-        },
-        {
             "fid":"2",
             "name":"北京市",
             "name_en":"Beijing",
@@ -17,12 +9,20 @@
             "f_weathercn":"101010100"
         },
         {
-            "fid":"1100",
-            "name":"常熟市",
-            "name_en":"Changshu",
-            "name_py":"changshushi",
-            "f_province_cn":"江苏省",
-            "f_weathercn":"101190402"
+            "fid":"39",
+            "name":"上海市",
+            "name_en":"Shanghai",
+            "name_py":"shanghaishi",
+            "f_province_cn":"上海市",
+            "f_weathercn":"101020100"
+        },
+        {
+            "fid":"892",
+            "name":"深圳市",
+            "name_en":"Shenzhen",
+            "name_py":"shenzhenshi",
+            "f_province_cn":"广东省",
+            "f_weathercn":"101280601"
         }
     ]
 }

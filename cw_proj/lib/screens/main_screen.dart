@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:spritewidget/spritewidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:cw_proj/common/global.dart';
 import 'package:cw_proj/util/network_util.dart';
-import 'package:cw_proj/util/configFile.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/screens/city_screen.dart';
 import 'package:cw_proj/screens/setting_screen.dart';
@@ -42,9 +42,6 @@ class _MainScreenState extends State<MainScreen> {
   int _pageCount;
   PageController _pageController = PageController(initialPage: 0);
   
-  // 自选城市
-  HomeBean citys;
-
   bool assetsLoaded = false;
   WeatherWorld weatherWorld;
   AppBar _appBar;
@@ -52,6 +49,8 @@ class _MainScreenState extends State<MainScreen> {
   bool allowJumpTo = false;
   double criticalH = 0.0;
 
+  HomeBean get _locations => Global.locations;
+  List<HomeEntity> get _weatherInfos => Global.homeEntityList;
   var _futureBuilderFuture = null;
 
   // 天气数据
@@ -60,8 +59,6 @@ class _MainScreenState extends State<MainScreen> {
   Hours _hour;
   Daily _daily;
   Live _live;
-
-  List<HomeEntity> homeEntityList = [];
 
   // 加载本项目所需的 assets.
   Future<Null> _loadAssets(AssetBundle bundle) async {
@@ -85,15 +82,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    // 若是初次打开APP，APP自动定位
-
     // 否则加载自选城市
-    fetchCity().then((value){
-      citys = value;
-      for (var city in citys.record) {
-        fetchWeatherData(city);
-      }
-    });
+    for (var city in _locations.record) {
+      fetchWeatherData(city);
+    }
 
     super.initState();
     //监听滚动事件，打印滚动位置
@@ -124,6 +116,7 @@ class _MainScreenState extends State<MainScreen> {
 
   // 初始化首页天气数据
   Future fetchWeatherData(Record record) async {
+    String cityName = record.name;
     String cityID = record.fid;
     return Future.wait([
       fetchCondition(cityID),
@@ -137,11 +130,11 @@ class _MainScreenState extends State<MainScreen> {
         _hour = results[2];
         _daily = results[3];
         _live = results[4];
-        HomeEntity entity = HomeEntity(condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
-        homeEntityList.add(entity);
-        if (homeEntityList.length == citys.record.length) {
+        HomeEntity entity = HomeEntity(cityName: cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
+        _weatherInfos.add(entity);
+        if (_weatherInfos.length == _locations.record.length) {
           setState(() {
-            _futureBuilderFuture = homeEntityList;
+            _futureBuilderFuture = _weatherInfos;
           });
         }
     });
@@ -155,7 +148,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void onPageChanged(int index){
-    HomeEntity entity = homeEntityList[index];
 
 
   }
@@ -166,6 +158,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //
+
+
+
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
 
     final size = MediaQuery.of(context).size;
@@ -203,11 +199,10 @@ class _MainScreenState extends State<MainScreen> {
                                 onPageChanged: onPageChanged,
                                 controller: _pageController,
                                 itemBuilder: (context, index) {
-                                  String cityName = citys.record[index].name;
-                                  HomeEntity entity = homeEntityList[index];
-                                  return WeatherInfo(homeEntity: entity, cityName: cityName,);
+                                  HomeEntity entity = _weatherInfos[index];
+                                  return WeatherInfo(homeEntity: entity);
                                 },
-                                itemCount: citys.record.length,
+                                itemCount: _weatherInfos.length,
                               ));
                         }
                     )
@@ -232,7 +227,7 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.push(context, PageRouteBuilder(
                   opaque: false,
                   pageBuilder: (BuildContext context, _, __) {
-                    return CityScreen(selectedCitys: citys.record,);
+                    return CityScreen(selectedCitys: _locations.record,);
                   },
                   
                   transitionsBuilder: (_, Animation<double> animation, Animation<double> animation1, Widget child){

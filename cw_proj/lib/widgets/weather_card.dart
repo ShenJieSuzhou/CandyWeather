@@ -15,9 +15,8 @@ import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 class WeatherInfo extends StatefulWidget {
   final HomeEntity homeEntity;
-  final String cityName;
 
-  WeatherInfo({Key key, this.homeEntity, this.cityName}) : super(key: key);
+  WeatherInfo({Key key, this.homeEntity}) : super(key: key);
 
   @override
   WeatherInfoState createState() => WeatherInfoState();
@@ -189,7 +188,7 @@ class WeatherInfoState extends State<WeatherInfo> {
             children: <Widget>[
                 Container(
                   height: ScreenUtil().setHeight(310),
-                  child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.cityName),
+                  child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.homeEntity.cityName),
                 ),
                 SizedBox(
                   height: ScreenUtil().setWidth(10),
