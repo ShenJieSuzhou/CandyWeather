@@ -1,4 +1,7 @@
+import 'package:cw_proj/Model/home_entity.dart';
+import 'package:cw_proj/Model/my_select_city.dart';
 import 'package:cw_proj/util/cityidlist.dart';
+import 'package:cw_proj/util/network_util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -6,7 +9,9 @@ import 'package:cw_proj/Model/data_key_bean.dart';
 import 'package:cw_proj/provider/theme_provider.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/bus/custom_event_bus.dart';
-
+import 'package:cw_proj/common/global.dart';
+import 'package:provider/provider.dart';
+import 'package:cw_proj/Model/aqi.dart';
 
 List<HotCitys> nodes = [];
 
@@ -90,6 +95,9 @@ class searchBarDelegate extends SearchDelegate<String>{
             );
           }
         }
+        return Container(
+
+        );
       },
       future: getHotCity(),
       );
@@ -121,10 +129,25 @@ class searchBarDelegate extends SearchDelegate<String>{
             return ListView.separated(
               itemBuilder: (BuildContext context, int index){
               String name = records[index].name;
-              String fid = records[index].fid;
               return ListTile(title: Text("$name"), onTap: (){
-                bus.emit("addCity", records[index]);
-                close(context, null);
+                // show loading
+                showLoadingDialog(context);
+                String cityID = records[index].fid;
+                Future.wait([
+                  fetchCondition(cityID),
+                  fetchAQI(cityID),
+                  fetchHours(cityID),
+                  fetchDailys(cityID),
+                  fetchLiveIndex(cityID)
+                ]).then((results) {
+                  AQI aqi = results[1];
+                  HomeEntity entity = HomeEntity(cityName: aqi.cityName, condition: results[0], aqi: results[1], hour: results[2], daily: results[3], live: results[4]);
+                  Provider.of<SelectedCityModel>(context, listen: false).addCity(entity);
+                  Global.locations.record.add(records[index]);
+                  // close loading
+                  Navigator.of(context).pop();
+                  close(context, null);
+                });
               },);
             }, 
             separatorBuilder: (BuildContext context, int index) {
@@ -134,6 +157,9 @@ class searchBarDelegate extends SearchDelegate<String>{
             );
           }
         }
+        return Container(
+
+        );
       },
       future: getSearchData(key),
     );
@@ -141,6 +167,27 @@ class searchBarDelegate extends SearchDelegate<String>{
 
   Future<List<Record>> getSearchData(String key) async {
     return CityListUtil.getSearchResults(key);
+  }
+
+  showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, //点击遮罩不关闭对话框
+      builder: (context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CircularProgressIndicator(),
+              Padding(
+                padding: const EdgeInsets.only(top: 26.0),
+                child: Text("正在加载，请稍后..."),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 

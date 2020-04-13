@@ -12,19 +12,9 @@ class SelectedCityModel extends SelCityChangeNotifier{
     notifyListeners();
   }
 
-  void add(HomeEntity weatherModel){
+  void addCity(HomeEntity weatherModel){
     weathers.add(weatherModel);
     notifyListeners();
   }
 
-}
-
-class Counter with ChangeNotifier {
-  int _count = 0;
-  int get count => _count;
-
-  void increment() {
-    _count++;
-    notifyListeners();
-  }
 }

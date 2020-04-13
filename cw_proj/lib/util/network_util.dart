@@ -1,4 +1,6 @@
 import 'package:cw_proj/Model/daily.dart';
+import 'package:cw_proj/Model/data_key_bean.dart';
+import 'package:cw_proj/Model/home_entity.dart';
 import 'package:cw_proj/util/dio_utils.dart';
 import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/Model/condition.dart';
@@ -81,7 +83,19 @@ import 'package:cw_proj/Model/base_entity.dart';
     //     },
     //     queryParameters: bodys,
     // );
-  } 
+  }
+
+//  Future fetchCityWeatherInfo(Record record) async {
+//    String cityName = record.name;
+//    String cityID = record.fid;
+//    return Future.wait([
+//      fetchCondition(cityID),
+//      fetchAQI(cityID),
+//      fetchHours(cityID),
+//      fetchDailys(cityID),
+//      fetchLiveIndex(cityID)
+//    ]);
+//  }
 
 // class NetWorkUtil{
 

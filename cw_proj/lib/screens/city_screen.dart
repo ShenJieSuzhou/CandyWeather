@@ -49,25 +49,6 @@ class _CityScreenState extends State<CityScreen> {
             itemBuilder: (context, index) {
               HomeEntity weatherInfo = weatherArray[index];
               return  CityBriefCard(cityName: weatherInfo.cityName, temperature: weatherInfo.condition.temp, weather:  weatherInfo.condition.condition);
-//              return FutureBuilder(
-//                future: fetchCondition(record.fid),
-//                builder: (BuildContext context, AsyncSnapshot snapShot){
-//                  if(snapShot.connectionState == ConnectionState.waiting){
-//                    return Text('Loading');
-//                  }else if(snapShot.connectionState == ConnectionState.active){
-//
-//                  }else if(snapShot.connectionState == ConnectionState.done){
-//                    if(snapShot.hasError){
-//                      return Text('Error: ${snapShot.error}');
-//                    }
-//                    _condition = snapShot.data;
-//                    return CityBriefCard(cityName: widget.selectedCitys[index].name, temperature: _condition.temp, weather: _condition.condition);
-//                  }
-//                  return Container(
-//
-//                  );
-//                }
-//              );
             },
             separatorBuilder: (context, index) {
               return Divider(
