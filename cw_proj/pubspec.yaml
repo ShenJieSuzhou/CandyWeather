@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  provider: ^4.0.5
   shared_preferences: ^0.5.1
   grouped_list: ^1.2.1
   spritewidget:

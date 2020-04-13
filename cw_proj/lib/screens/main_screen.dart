@@ -1,9 +1,11 @@
 import 'package:cw_proj/Model/condition.dart';
 import 'package:cw_proj/Model/data_key_bean.dart';
+import 'package:cw_proj/Model/my_select_city.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui' as ui show Image;
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:spritewidget/spritewidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -50,8 +52,8 @@ class _MainScreenState extends State<MainScreen> {
   double criticalH = 0.0;
 
   HomeBean get _locations => Global.locations;
-  List<HomeEntity> get _weatherInfos => Global.homeEntityList;
-  var _futureBuilderFuture = null;
+  List<HomeEntity> weatherInfos = [];
+  bool _isCompleteInit = false;
 
   // 天气数据
   Condition _condition;
@@ -82,11 +84,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    // 否则加载自选城市
-    for (var city in _locations.record) {
-      fetchWeatherData(city);
-    }
-
     super.initState();
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
@@ -131,11 +128,10 @@ class _MainScreenState extends State<MainScreen> {
         _daily = results[3];
         _live = results[4];
         HomeEntity entity = HomeEntity(cityName: cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
-        _weatherInfos.add(entity);
-        if (_weatherInfos.length == _locations.record.length) {
-          setState(() {
-            _futureBuilderFuture = _weatherInfos;
-          });
+        weatherInfos.add(entity);
+        if (weatherInfos.length == _locations.record.length) {
+          _isCompleteInit = true;
+          Provider.of<SelectedCityModel>(context, listen: false).weathers = weatherInfos;
         }
     });
   }
@@ -158,9 +154,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //
-
-
+    List<HomeEntity> weatherArray = Provider.of<SelectedCityModel>(context).locationList;
 
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
 
@@ -172,18 +166,18 @@ class _MainScreenState extends State<MainScreen> {
     double appBarHeight = _appBar.preferredSize.height;
 
     criticalH = screenHeight - appBarHeight - statusBarHeight - 20;
-    if (_futureBuilderFuture == null) {
-      return Scaffold(
+
+    return Scaffold(
         appBar: _appBar,
-        body: Center(
-              child: Loading(indicator: BallPulseIndicator(), size: 50.0),
-            )
-      );
-    } else {
-      return Scaffold(
-          appBar: _appBar,
-          body: Material(
-            child: Stack(
+        body: Builder(builder: (context){
+          if (!_isCompleteInit) {
+            //请求自选城市天气报告
+            for (var city in _locations.record) {
+              fetchWeatherData(city);
+            }
+            return Center(child:Loading(indicator: BallPulseIndicator(), size: 50.0),);
+          } else {
+            return Stack(
               children: <Widget>[
                 // SpriteWidget(weatherWorld),
                 Scrollbar(
@@ -199,20 +193,21 @@ class _MainScreenState extends State<MainScreen> {
                                 onPageChanged: onPageChanged,
                                 controller: _pageController,
                                 itemBuilder: (context, index) {
-                                  HomeEntity entity = _weatherInfos[index];
+                                  HomeEntity entity = weatherArray[index];
                                   return WeatherInfo(homeEntity: entity);
                                 },
-                                itemCount: _weatherInfos.length,
+                                itemCount: weatherArray.length,
                               ));
                         }
                     )
                 )
               ],
-          ),
-      ));
-    }
-  }
+            );
+          }
+        },),
 
+    );
+  }
 
   Widget createNaviBar(){
     return AppBar(
@@ -272,6 +267,43 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+class CounterLabel extends StatelessWidget {
+  const CounterLabel({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final counter = Provider.of<Counter>(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        const Text(
+          'You have pushed the button this many times:',
+        ),
+        Text(
+          '${counter.count}',
+          // ignore: deprecated_member_use
+//          style: Theme.of(context).textTheme.display1,
+        ),
+      ],
+    );
+  }
+}
+
+class IncrementCounterButton extends StatelessWidget {
+  const IncrementCounterButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Provider.of<Counter>(context, listen: false).increment();
+      },
+      tooltip: 'Increment',
+      child: const Icon(Icons.add),
+    );
+  }
+}
 
 // For the different weathers we are displaying different gradient backgrounds,
 // these are the colors for top and bottom.
