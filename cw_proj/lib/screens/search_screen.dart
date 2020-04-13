@@ -12,6 +12,7 @@ import 'package:cw_proj/bus/custom_event_bus.dart';
 import 'package:cw_proj/common/global.dart';
 import 'package:provider/provider.dart';
 import 'package:cw_proj/Model/aqi.dart';
+import 'package:cw_proj/widgets/loadingDialog.dart';
 
 List<HotCitys> nodes = [];
 
@@ -130,24 +131,32 @@ class searchBarDelegate extends SearchDelegate<String>{
               itemBuilder: (BuildContext context, int index){
               String name = records[index].name;
               return ListTile(title: Text("$name"), onTap: (){
-                // show loading
-                showLoadingDialog(context);
                 String cityID = records[index].fid;
-                Future.wait([
-                  fetchCondition(cityID),
-                  fetchAQI(cityID),
-                  fetchHours(cityID),
-                  fetchDailys(cityID),
-                  fetchLiveIndex(cityID)
-                ]).then((results) {
-                  AQI aqi = results[1];
-                  HomeEntity entity = HomeEntity(cityName: aqi.cityName, condition: results[0], aqi: results[1], hour: results[2], daily: results[3], live: results[4]);
-                  Provider.of<SelectedCityModel>(context, listen: false).addCity(entity);
-                  Global.locations.record.add(records[index]);
-                  // close loading
-                  Navigator.of(context).pop();
+                String cityName = records[index].name;
+                if (isCityExisted(cityName)) {
                   close(context, null);
-                });
+                } else {
+                  // 请求城市天气数据
+                  // show loading
+                  LoadingDialog.showLoadingDialog(context);
+                  Future.wait([
+                    fetchCondition(cityID),
+                    fetchAQI(cityID),
+                    fetchHours(cityID),
+                    fetchDailys(cityID),
+                    fetchLiveIndex(cityID)
+                  ]).then((results) {
+                    AQI aqi = results[1];
+                    HomeEntity entity = HomeEntity(cityName: aqi.cityName, condition: results[0], aqi: results[1], hour: results[2], daily: results[3], live: results[4]);
+                    Provider.of<SelectedCityModel>(context, listen: false).addCity(entity);
+                    // 持久化地名
+                    Global.locations.record.add(records[index]);
+                    Global.saveLocations();
+                    // close loading
+                    Navigator.of(context).pop();
+                    close(context, null);
+                  });
+                }
               },);
             }, 
             separatorBuilder: (BuildContext context, int index) {
@@ -169,25 +178,15 @@ class searchBarDelegate extends SearchDelegate<String>{
     return CityListUtil.getSearchResults(key);
   }
 
-  showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, //点击遮罩不关闭对话框
-      builder: (context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(),
-              Padding(
-                padding: const EdgeInsets.only(top: 26.0),
-                child: Text("正在加载，请稍后..."),
-              )
-            ],
-          ),
-        );
-      },
-    );
+  // 判断城市是否已经添加过
+  bool isCityExisted(String cityName){
+    List<HomeEntity> cityWeatherInfos = Global.homeEntityList;
+    for (var city in  cityWeatherInfos) {
+      if (city.cityName == cityName) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -258,7 +257,6 @@ class SearchDefaultItemView extends StatelessWidget {
                   ),
                   onTap: () {
                     callback(childNode.name);
-                    // bus.emit("addCity", childNode.id);
                   },
                 );
               }).toList(),

@@ -113,7 +113,6 @@ class _MainScreenState extends State<MainScreen> {
 
   // 初始化首页天气数据
   Future fetchWeatherData(Record record) async {
-    String cityName = record.name;
     String cityID = record.fid;
     return Future.wait([
       fetchCondition(cityID),
@@ -127,7 +126,7 @@ class _MainScreenState extends State<MainScreen> {
         _hour = results[2];
         _daily = results[3];
         _live = results[4];
-        HomeEntity entity = HomeEntity(cityName: cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
+        HomeEntity entity = HomeEntity(cityName: _aqi.cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
         weatherInfos.add(entity);
         if (weatherInfos.length == _locations.record.length) {
           _isCompleteInit = true;
