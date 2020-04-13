@@ -222,7 +222,7 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.push(context, PageRouteBuilder(
                   opaque: false,
                   pageBuilder: (BuildContext context, _, __) {
-                    return CityScreen(selectedCitys: _locations.record,);
+                    return CityScreen();
                   },
                   
                   transitionsBuilder: (_, Animation<double> animation, Animation<double> animation1, Widget child){
