@@ -1,11 +1,10 @@
 import 'package:cw_proj/Model/my_select_city.dart';
 import 'package:cw_proj/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:cw_proj/screens/main_screen.dart';
 import 'package:cw_proj/common/global.dart';
 import 'package:provider/provider.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cw_proj/Model/setting_model.dart';
 
 void main() async{
  WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +34,8 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => SelectedCityModel()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => PositionModel()),
+        ChangeNotifierProvider(create: (_) => NotificationModel()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (BuildContext context, themeProvider, Widget child){
