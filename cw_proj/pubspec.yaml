@@ -94,6 +94,7 @@ flutter:
     - assets/weatherIcons/W45.png
     - assets/weatherIcons/W46.png
     - assets/Config/SelectedCitys.json
+    - assets/Config/HotCitys.json
 
 
 

@@ -6,11 +6,13 @@ import 'package:cw_proj/screens/language_screen.dart';
 import 'package:cw_proj/screens/units_screen.dart';
 import 'package:cw_proj/screens/contactus_screen.dart';
 import 'package:cw_proj/screens/push_screen.dart';
+import 'package:cw_proj/screens/position_screen.dart';
 
 
 enum SettingItem{
   SETTING_WIDGET,
   SETTING_BACKGROUND,
+  SETTING_POSITION,
   SETTING_PUSH,
   SETTING_LANGUAGE,
   SETTING_UNITS,
@@ -135,6 +137,14 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     Divider(height: 1.0,),
                     ListTile(
+                      title: Text('定位'),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: (){
+                        onTapEvent(SettingItem.SETTING_POSITION);
+                      },
+                    ),
+                    Divider(height: 1.0,),
+                    ListTile(
                       title: Text('通知'),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
@@ -219,6 +229,9 @@ class _SettingScreenState extends State<SettingScreen> {
       case SettingItem.SETTING_CONTACTUS:
         pushTo(ContactUsScreen());
       break;
+      case SettingItem.SETTING_POSITION:
+        pushTo(PositionScreen());
+      break;
       case SettingItem.SETTING_COMMENTS:
       break;
       case SettingItem.SETTING_RECOMMEND:
@@ -245,61 +258,4 @@ class _SettingScreenState extends State<SettingScreen> {
         }
     ));
   }
-  // Widget listDetail(List<String> settings){
-  //   print(settings);
-  //   return ListView.separated(
-  //         physics: NeverScrollableScrollPhysics(),
-  //         padding: const EdgeInsets.all(8),
-  //         itemCount: settings.length,
-  //         itemBuilder: (BuildContext context, int index) {
-  //         return Container(
-  //           child: Center(child: Text('Entry ${settings[index]}')),
-  //         );
-  //       },
-  //     separatorBuilder: (BuildContext context, int index) => const Divider(),
-  //   );
-  // }
-
-  // Widget icon
-  // Widget settingListView(){
-  //   return ListView.separated(
-  //     physics: NeverScrollableScrollPhysics(),
-  //     itemCount: 9,
-  //     separatorBuilder: (context, index){
-  //       if(index == 0){
-  //         return Container(
-  //           height: 40.0,
-  //           child: Text("通用",),
-  //           color: Colors.blue,
-  //         );
-  //       }else if(index == 4){
-  //         return Container(
-  //           height: 40.0,
-  //           child: Text("关于",),
-  //           color: Colors.blue,
-  //         );
-  //       }else {
-  //         return Container();
-  //       }
-  //     },
-  //     itemBuilder: (context, index){
-  //       return InkWell(
-  //         child: Container(
-  //           height: 40.0,
-  //           child: ListTile(
-  //             leading: Icon(Icons.favorite),
-  //             title: Text("动态背景"),
-  //             onTap: (){
-  //               print("[ListTile view tap]");
-  //             },
-  //           ),
-  //         ),
-  //         onTap: (){
-  //           print("[setting view tap]");
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
 }
