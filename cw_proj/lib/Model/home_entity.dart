@@ -11,6 +11,7 @@ class HomeEntity {
   Hours hour;
   Daily daily;
   Live live;
+  Map<String, String> jiTang;
 
   HomeEntity({
     this.cityName,
@@ -18,7 +19,8 @@ class HomeEntity {
     this.aqi,
     this.hour,
     this.daily,
-    this.live
+    this.live,
+    this.jiTang
   });
 
 } 
