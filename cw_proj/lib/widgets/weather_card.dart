@@ -117,7 +117,7 @@ class WeatherInfoState extends State<WeatherInfo> {
     );
   }
 
-  Widget colorTheSoulWords(bool isDark){
+  Widget colorTheSoulWords(Map<String, String> jitang, bool isDark){
     return Container(
       color: Colors.transparent,
       padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -136,14 +136,14 @@ class WeatherInfoState extends State<WeatherInfo> {
               Expanded(
                 child: Column(
                   children: <Widget>[
-                    Text('有许多事,在你还不懂得珍惜之前已成旧事。有许多事,在你还不懂得珍惜之前已成旧事。',
+                    Text(jitang["data"],
                         style: TextStyle(
                             fontSize: ScreenUtil().setSp(30),
                           ),
                     ),
                     Align(
                       alignment: FractionalOffset.centerRight,
-                      child: Text('- 匿名',
+                      child: Text('- ${jitang["name"]}',
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30),
                           ),
@@ -202,7 +202,7 @@ class WeatherInfoState extends State<WeatherInfo> {
                 ),
                 Container(
                   height: ScreenUtil().setHeight(200),
-                  child: colorTheSoulWords(isDark),
+                  child: colorTheSoulWords(widget.homeEntity.jiTang ,isDark),
                 ),
               ],
             ),

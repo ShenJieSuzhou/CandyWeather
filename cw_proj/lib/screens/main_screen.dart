@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cw_proj/Model/condition.dart';
 import 'package:cw_proj/Model/data_key_bean.dart';
 import 'package:cw_proj/Model/my_select_city.dart';
@@ -25,6 +27,7 @@ import 'package:cw_proj/Model/home_entity.dart';
 
 import 'package:loading/loading.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:cw_proj/util/data.dart';
 
 ImageMap _images;
 SpriteSheet _sprites;
@@ -62,6 +65,8 @@ class _MainScreenState extends State<MainScreen> {
   Hours _hour;
   Daily _daily;
   Live _live;
+
+  Random random = Random();
 
   // 加载本项目所需的 assets.
   Future<Null> _loadAssets(AssetBundle bundle) async {
@@ -142,7 +147,8 @@ class _MainScreenState extends State<MainScreen> {
         _hour = results[2];
         _daily = results[3];
         _live = results[4];
-        HomeEntity entity = HomeEntity(cityName: _aqi.cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
+        Map<String, String> jiTang =  jiTangData[random.nextInt(5)];
+        HomeEntity entity = HomeEntity(cityName: _aqi.cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live, jiTang: jiTang);
         cityWeatherHash[_aqi.cityName] = entity;
         if (cityWeatherHash.length == _locations.record.length) {
           _isCompleteInit = true;
