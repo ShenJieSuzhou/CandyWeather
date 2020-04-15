@@ -136,14 +136,14 @@ class _SettingScreenState extends State<SettingScreen> {
                       },
                     ),
                     Divider(height: 1.0,),
-                    ListTile(
-                      title: Text('定位'),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: (){
-                        onTapEvent(SettingItem.SETTING_POSITION);
-                      },
-                    ),
-                    Divider(height: 1.0,),
+                    // ListTile(
+                    //   title: Text('定位'),
+                    //   trailing: Icon(Icons.arrow_forward_ios),
+                    //   onTap: (){
+                    //     onTapEvent(SettingItem.SETTING_POSITION);
+                    //   },
+                    // ),
+                    // Divider(height: 1.0,),
                     ListTile(
                       title: Text('通知'),
                       trailing: Icon(Icons.arrow_forward_ios),
@@ -230,7 +230,7 @@ class _SettingScreenState extends State<SettingScreen> {
         pushTo(ContactUsScreen());
       break;
       case SettingItem.SETTING_POSITION:
-        pushTo(PositionScreen());
+        // pushTo(PositionScreen());
       break;
       case SettingItem.SETTING_COMMENTS:
       break;

@@ -60,10 +60,9 @@ target 'Runner' do
       FileUtils.cp(File.join(cached_framework_dir, 'Flutter.podspec'), copied_flutter_dir)
     end
   end
-
+  
   # Keep pod path relative so it can be checked into Podfile.lock.
   pod 'Flutter', :path => 'Flutter'
-
   # Plugin Pods
 
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock

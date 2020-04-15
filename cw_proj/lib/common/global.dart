@@ -44,6 +44,33 @@ class Global{
     _prefs.setString("isFirst", "1");
   }
 
+  static savePositionConfig (String flag) {
+    _prefs.setString("position", flag);
+  }
+
+  static saveNotiConfig (String flag) {
+    _prefs.setString("notification", flag);
+  }
+
+  // 获取APP设置
+  static bool isOpenPosition () {
+    var flag = _prefs.getString("position");
+    if (flag == "1"){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static bool isOpenNotification () {
+    var flag = _prefs.getString("notification");
+    if (flag == "1"){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // 是否第一次打开App
   static bool isFirst (){
     var first = _prefs.getString("isFirst");

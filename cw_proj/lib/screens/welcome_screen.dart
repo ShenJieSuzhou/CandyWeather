@@ -2,6 +2,7 @@ import 'package:cw_proj/Model/setting_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cw_proj/screens/main_screen.dart';
+import 'package:cw_proj/common/global.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -17,23 +18,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           color: Colors.white,
           child: Column(
             children: <Widget>[
-              ListTile(     
-                leading: Icon(Icons.location_on),
-                title: Container(
-                  padding: EdgeInsets.only(left: 0),
-                  child: Text("打开自动定位", style: TextStyle(fontSize: 16),),
-                ),
-                trailing: Switch(value: false, onChanged: (bool v){
-                  if (v){
-                    Provider.of<PositionModel>(context).openPosition();
-                    // 自动定位
-                    
-                  } else {
-                    Provider.of<PositionModel>(context).closePosition();
-                    // 移除定位到的城市
-                  } 
-                }),
-              ),
+              // ListTile(     
+              //   leading: Icon(Icons.location_on),
+              //   title: Container(
+              //     padding: EdgeInsets.only(left: 0),
+              //     child: Text("打开自动定位", style: TextStyle(fontSize: 16),),
+              //   ),
+              //   trailing: Switch(value: false, onChanged: (bool v){
+              //     if (v){
+              //       // 打开自动定位
+              //       Provider.of<PositionModel>(context).openPosition();
+              //       // 数据持久化
+              //       Global.savePositionConfig("1");
+              //     } else {
+              //       // 关闭定位
+              //       Provider.of<PositionModel>(context).closePosition();
+              //       // 数据持久化
+              //       Global.savePositionConfig("0");
+              //     } 
+              //   }),
+              // ),
               ListTile(     
                 leading: Icon(Icons.notifications_active),
                 title: Container(
@@ -42,11 +46,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 trailing: Switch(value: false, onChanged: (bool v){
                   if (v){
-                    Provider.of<NotificationModel>(context).openNotification();
                     // 打开消息推送
+                    Provider.of<NotificationModel>(context).openNotification();
+                    Global.saveNotiConfig("1");
                   } else {
-                    Provider.of<NotificationModel>(context).closeNotification();
                     // 关闭消息推送
+                    Provider.of<NotificationModel>(context).closeNotification();
+                    Global.saveNotiConfig("0");
                   } 
                 }),
               ),
@@ -61,6 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
          Navigator.push(context, PageRouteBuilder(
                 opaque: false,
                 pageBuilder:(BuildContext context, _, __){
+                  Global.saveEnterConfig();
                   return MainScreen();
                 },
 

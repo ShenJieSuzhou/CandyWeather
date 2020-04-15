@@ -113,6 +113,21 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 初始化首页天气数据
+  void initHomeDataInfo() {
+    for (var city in _locations.record) {
+        fetchWeatherData(city);
+    }
+    // var isOpenPosition = Global.isOpenPosition();
+    // if (isOpenPosition) {
+    //   // 自动定位功能
+
+
+    // } else {
+    //   // 加载配置城市
+      
+    // } 
+  }
+
   Future fetchWeatherData(Record record) async {
     String cityID = record.fid;
     return Future.wait([
@@ -140,6 +155,7 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+
   @override
   void dispose(){
     _controller.dispose();
@@ -148,7 +164,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void onPageChanged(int index){
-
 
   }
 
@@ -176,9 +191,7 @@ class _MainScreenState extends State<MainScreen> {
         body: Builder(builder: (context){
           if (!_isCompleteInit) {
             //请求自选城市天气报告
-            for (var city in _locations.record) {
-              fetchWeatherData(city);
-            }
+            initHomeDataInfo();
             return Center(child:Loading(indicator: BallPulseIndicator(), size: 50.0),);
           } else {
             return Stack(
