@@ -5,6 +5,7 @@ import 'package:cw_proj/screens/main_screen.dart';
 import 'package:cw_proj/common/global.dart';
 import 'package:provider/provider.dart';
 import 'package:cw_proj/Model/setting_model.dart';
+import 'package:cw_proj/screens/welcome_screen.dart';
 
 void main() async{
  WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +45,7 @@ class _MyAppState extends State<MyApp> {
             title: '铂金天气',
             theme: themeProvider.getTheme(),
             darkTheme: themeProvider.getTheme(isDarkMode: true),
-            home: MainScreen(),
+            home: Global.isFirst() ? WelcomeScreen() : MainScreen(),
             builder: (context, child){
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), // 或者 MediaQueryData.fromWindow(WidgetsBinding.instance.window).copyWith(textScaleFactor: 1.0),

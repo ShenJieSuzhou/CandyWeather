@@ -52,6 +52,7 @@ class _MainScreenState extends State<MainScreen> {
   double criticalH = 0.0;
 
   HomeBean get _locations => Global.locations;
+  Map<String, HomeEntity> cityWeatherHash = Map<String, HomeEntity>();
   List<HomeEntity> weatherInfos = [];
   bool _isCompleteInit = false;
 
@@ -127,9 +128,13 @@ class _MainScreenState extends State<MainScreen> {
         _daily = results[3];
         _live = results[4];
         HomeEntity entity = HomeEntity(cityName: _aqi.cityName, condition: _condition, aqi: _aqi, hour: _hour, daily: _daily, live: _live);
-        weatherInfos.add(entity);
-        if (weatherInfos.length == _locations.record.length) {
+        cityWeatherHash[_aqi.cityName] = entity;
+        if (cityWeatherHash.length == _locations.record.length) {
           _isCompleteInit = true;
+          for (var city in _locations.record) {
+            HomeEntity entity = cityWeatherHash[city.name];
+            weatherInfos.add(entity);
+          }
           Provider.of<SelectedCityModel>(context, listen: false).weathers = weatherInfos;
         }
     });

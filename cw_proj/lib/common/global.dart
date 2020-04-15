@@ -39,4 +39,22 @@ class Global{
     _prefs.setString("locations", jsonEncode(locations.toJson()));
   }
 
+  // 保存APP设置
+  static saveEnterConfig () {
+    _prefs.setString("isFirst", "1");
+  }
+
+  // 是否第一次打开App
+  static bool isFirst (){
+    var first = _prefs.getString("isFirst");
+    if (first == null) {
+      return true;
+    } else {
+      if (first == "1") {
+        return false;
+      }
+      return true;
+    }
+  }
+
 }
