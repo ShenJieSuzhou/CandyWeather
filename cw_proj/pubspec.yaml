@@ -60,7 +60,20 @@ flutter:
     - assets/icon-sun.png
     - assets/ray.png
     - assets/sun.png
-    - assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg
+    - assets/bingPlaceholder/placeholder0.png
+    - assets/bingPlaceholder/placeholder1.png
+    - assets/bingPlaceholder/placeholder2.png
+    - assets/bingPlaceholder/placeholder3.png
+    - assets/bingPlaceholder/placeholder4.png
+    - assets/bingPlaceholder/placeholder5.png
+    - assets/bingPlaceholder/placeholder6.png
+    - assets/bingPlaceholder/placeholder7.png
+    - assets/bingPlaceholder/placeholder8.png
+    - assets/bingPlaceholder/placeholder9.png
+    - assets/bingPlaceholder/placeholder10.png
+    - assets/bingPlaceholder/placeholder11.png
+    - assets/bingPlaceholder/placeholder12.png
+    - assets/bingPlaceholder/placeholder13.png
     - assets/weathersprites.json
     - assets/weathersprites.png
     - assets/weatherIcons/W0.png

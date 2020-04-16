@@ -1,6 +1,6 @@
-import 'package:cw_proj/Model/data_key_bean.dart';
+import 'dart:math';
+
 import 'package:cw_proj/Model/home_entity.dart';
-import 'package:cw_proj/util/network_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
@@ -11,7 +11,6 @@ import 'package:cw_proj/widgets/air_quality.dart';
 import 'package:cw_proj/widgets/forecast_day.dart';
 import 'package:cw_proj/widgets/forecast_hours.dart';
 import 'package:cw_proj/widgets/live_index.dart';
-import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 class WeatherInfo extends StatefulWidget {
   final HomeEntity homeEntity;
@@ -25,6 +24,7 @@ class WeatherInfo extends StatefulWidget {
 class WeatherInfoState extends State<WeatherInfo> {
   bool isShowLoading = true;
   Loading loading = Loading();
+  Random random = Random();
   
   Widget realTimeWeather(double width, bool isDark, Condition condition, String location){
     return Padding(
@@ -104,17 +104,21 @@ class WeatherInfoState extends State<WeatherInfo> {
   Widget bingDeskPic(double width, String picPath){
     return Container(
       margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
+      child: ClipRRect(
+        // decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
-          image: DecorationImage(
-            image: AssetImage(picPath),
-            fit: BoxFit.fitHeight
-          )
+        // ),
+        child: FadeInImage.assetNetwork(
+          placeholder: "assets/bingPlaceholder/placeholder${random.nextInt(14)}.png", 
+          image: picPath,
+          fit: BoxFit.cover,
         ),
+        //   image: DecorationImage(
+        //     image: NetworkImage(picPath),
+        //     fit: BoxFit.cover,
+        // ),
       ),
-    );
+      );
   }
 
   Widget colorTheSoulWords(Map<String, String> jitang, bool isDark){
@@ -195,7 +199,7 @@ class WeatherInfoState extends State<WeatherInfo> {
                 ),
                 Container(
                   height: ScreenUtil().setHeight(420),
-                  child: bingDeskPic(width, "assets/SpectralTarsiers_ZH-CN1108590907_1920x1080.jpg"),
+                  child: bingDeskPic(width, "https://bing.ioliu.cn/v1/rand/?d=1&w=640&h=480"),
                 ),
                 SizedBox(
                   height: ScreenUtil().setWidth(10),
