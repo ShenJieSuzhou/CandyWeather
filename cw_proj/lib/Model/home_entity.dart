@@ -3,6 +3,7 @@ import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/Model/condition.dart';
+import 'package:flutter/material.dart';
 
 class HomeEntity {
   String cityName;
@@ -24,3 +25,14 @@ class HomeEntity {
   });
 
 } 
+
+
+class BingModel with ChangeNotifier{
+  bool _isPageChanged = false;
+  bool get change => _isPageChanged;
+
+  void pageChanged(bool flag) {
+    _isPageChanged = flag;
+    notifyListeners();
+  }
+}

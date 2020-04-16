@@ -11,6 +11,7 @@ import 'package:cw_proj/widgets/air_quality.dart';
 import 'package:cw_proj/widgets/forecast_day.dart';
 import 'package:cw_proj/widgets/forecast_hours.dart';
 import 'package:cw_proj/widgets/live_index.dart';
+import 'package:provider/provider.dart';
 
 class WeatherInfo extends StatefulWidget {
   final HomeEntity homeEntity;
@@ -102,23 +103,22 @@ class WeatherInfoState extends State<WeatherInfo> {
   }
 
   Widget bingDeskPic(double width, String picPath){
-    return Container(
-      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: ClipRRect(
-        // decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-        // ),
-        child: FadeInImage.assetNetwork(
-          placeholder: "assets/bingPlaceholder/placeholder${random.nextInt(14)}.png", 
-          image: picPath,
-          fit: BoxFit.cover,
-        ),
-        //   image: DecorationImage(
-        //     image: NetworkImage(picPath),
-        //     fit: BoxFit.cover,
-        // ),
-      ),
-      );
+    return Builder(
+      builder: (BuildContext context) {
+        // var result = Provider.of<BingModel>(context).change;
+        return Container(
+          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            child: FadeInImage.assetNetwork(
+              placeholder: "assets/bingPlaceholder/placeholder${random.nextInt(14)}.png", 
+              image: picPath,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget colorTheSoulWords(Map<String, String> jitang, bool isDark){

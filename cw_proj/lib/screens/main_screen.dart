@@ -170,7 +170,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void onPageChanged(int index){
-
+    // var change = Provider.of<BingModel>(context).change;
+    // Provider.of<BingModel>(context, listen: true).pageChanged(true);
   }
 
   void setPageCount(int count){

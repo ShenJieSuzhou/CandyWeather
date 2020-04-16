@@ -6,6 +6,7 @@ import 'package:cw_proj/common/global.dart';
 import 'package:provider/provider.dart';
 import 'package:cw_proj/Model/setting_model.dart';
 import 'package:cw_proj/screens/welcome_screen.dart';
+import 'package:cw_proj/Model/home_entity.dart';
 
 void main() async{
  WidgetsFlutterBinding.ensureInitialized();
