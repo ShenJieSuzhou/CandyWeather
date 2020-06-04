@@ -1,15 +1,10 @@
 import 'package:cw_proj/Model/daily.dart';
-import 'package:cw_proj/Model/data_key_bean.dart';
-import 'package:cw_proj/Model/home_entity.dart';
 import 'package:cw_proj/util/dio_utils.dart';
 import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/Model/condition.dart';
 import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/Model/base_entity.dart';
-// import 'package:cw_proj/common/common.dart';
-// import 'package:flutter/foundation.dart';
-// import 'package:cw_proj/Model/error_handle.dart';
 
   // 天气实况
   Future fetchCondition<T>(String cityID) async{

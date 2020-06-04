@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: '铂金天气',
-            theme: themeProvider.getTheme(),
+            theme:  themeProvider.getTheme(),
             darkTheme: themeProvider.getTheme(isDarkMode: true),
             home: Global.isFirst() ? WelcomeScreen() : MainScreen(),
             builder: (context, child){
