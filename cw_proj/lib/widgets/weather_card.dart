@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cw_proj/Model/home_entity.dart';
+import 'package:cw_proj/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
@@ -41,6 +42,7 @@ class WeatherInfoState extends State<WeatherInfo> {
                 Text(location, 
                   style: TextStyle(
                       fontSize: ScreenUtil().setSp(50),
+                      color: isDark? Colours.text : Colours.dark_text
                     ),
                 ),
                 SizedBox(
@@ -48,8 +50,8 @@ class WeatherInfoState extends State<WeatherInfo> {
                 ),
                 Icon(
                   Icons.location_on, 
-                  color: isDark? Colors.white : Colors.black,
                   size: ScreenUtil().setWidth(45.0),
+                  color: isDark? Colours.text : Colours.dark_text,
                 ),
               ],
             ),
@@ -62,6 +64,7 @@ class WeatherInfoState extends State<WeatherInfo> {
             child: Text(condition.temp + "°",
                       style: TextStyle(
                       fontSize: ScreenUtil().setSp(50),
+                      color: isDark? Colours.text : Colours.dark_text
                     ),
                 )
           ),
@@ -76,6 +79,7 @@ class WeatherInfoState extends State<WeatherInfo> {
                   child: Text(condition.condition,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(40),
+                      color: isDark? Colours.text : Colours.dark_text
                     ),
                     ),
                 ),
@@ -94,6 +98,7 @@ class WeatherInfoState extends State<WeatherInfo> {
             child: Text(condition.tips, 
                       style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
+                      color: isDark? Colours.text : Colours.dark_text
                     ),
               ),
           ),
@@ -132,7 +137,7 @@ class WeatherInfoState extends State<WeatherInfo> {
               Container(
                 width: 5.0,
                 height: ScreenUtil().setHeight(120),
-                color: Colors.black,
+                color: isDark? Colors.black : Colors.white
               ),
               SizedBox(
                 width: ScreenUtil().setWidth(20),
@@ -143,6 +148,7 @@ class WeatherInfoState extends State<WeatherInfo> {
                     Text(jitang["data"],
                         style: TextStyle(
                             fontSize: ScreenUtil().setSp(30),
+                            color: isDark? Colours.text : Colours.dark_text
                           ),
                     ),
                     Align(
@@ -150,13 +156,13 @@ class WeatherInfoState extends State<WeatherInfo> {
                       child: Text('- ${jitang["name"]}',
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30),
+                            color: isDark? Colours.text : Colours.dark_text
                           ),
                         ),
                     )
                   ],
                 ),
               )
-
             ],
           )
         ],
@@ -184,9 +190,10 @@ class WeatherInfoState extends State<WeatherInfo> {
         child: InkWell(
           child: Container(
             decoration: BoxDecoration(
-            shape: BoxShape.rectangle, color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+            shape: BoxShape.rectangle, 
+            color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
+            ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -229,8 +236,7 @@ class WeatherInfoState extends State<WeatherInfo> {
               height: 350.0,
               width: ScreenUtil.screenWidth,
               decoration: BoxDecoration(
-                color: isDark ? Color(0xFF1c1c1e) : Color(
-                    0xFFf5f5f5),
+                color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.all(
                     Radius.circular(8)),

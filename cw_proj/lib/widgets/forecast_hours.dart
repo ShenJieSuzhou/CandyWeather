@@ -35,7 +35,7 @@ class ForcastHoursState extends State<ForcastHours> {
         padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
         child: Container(
           decoration: BoxDecoration(
-            color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+            color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),

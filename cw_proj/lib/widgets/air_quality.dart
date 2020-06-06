@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cw_proj/Model/aqi.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/res/colors.dart';
 
 class AirQuality extends StatefulWidget {
   AQI aqi;
@@ -125,23 +126,35 @@ class AirQualityState extends State<AirQuality> {
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.all(Radius.circular(8)),
-        color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+        color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
       ),
       child: Stack(
         children: <Widget>[
           Positioned(
             top: 10.0,
             left: 20.0,
-            child: Text('$title'),
+            child: Text('$title', 
+              style: TextStyle(
+                      color: isDark? Colours.text : Colours.dark_text
+                    ),
+              ),
           ),
           Align(
             alignment: Alignment.center,
-            child: Text('$value')
+            child: Text('$value',
+              style: TextStyle(
+                      color: isDark? Colours.text : Colours.dark_text
+                    ),
+            )
           ),
           Positioned(
             left: 20.0,
             bottom: 10.0,
-            child: Text('$extend'),
+            child: Text('$extend',
+              style: TextStyle(
+                      color: isDark? Colours.text : Colours.dark_text
+                    ),
+            ),
           ),
         ],
       ),

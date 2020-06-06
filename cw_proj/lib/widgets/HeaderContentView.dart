@@ -19,7 +19,7 @@ class _HeaderContentViewState extends State<HeaderContentView> {
             padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), ScreenUtil().setWidth(30), 0, 5),
             child: Text("2020年2月17日 星期一", 
             style: TextStyle(
-                      color: Colors.black,
+                      // color: Colors.black,
                       fontSize: ScreenUtil().setSp(35),
                     ),
             textAlign: TextAlign.start,),
@@ -29,7 +29,7 @@ class _HeaderContentViewState extends State<HeaderContentView> {
             padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, 0, 5),
             child: Text("Today",
             style: TextStyle(
-                      color: Colors.black,
+                      // color: Colors.black,
                       fontSize: ScreenUtil().setSp(80),
                       fontWeight: FontWeight.bold
                     ),

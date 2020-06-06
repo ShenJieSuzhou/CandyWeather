@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cw_proj/Model/live.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/res/colors.dart';
 
 class LiveIndex extends StatefulWidget {
   Live live;
@@ -37,13 +38,25 @@ class LiveIndexState extends State<LiveIndex> {
   Widget indexBoard(int code, String name, String level, String status, String desc){ 
     bool isDark = ThemeUtils.isDark(context);
     return Card(
-      color: isDark?Color(0xFF1c1c1e) : Color(0xFFf5f5f5),
+      color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
       child: ListTile(
         leading: Image(
           image: getLiveIndexIcon(code),),
-        title: Text('$name level:$level'),
-        subtitle: Text('$desc'),
-        trailing: Text('$status'),
+        title: Text('$name level:$level',
+          style: TextStyle(
+              color: isDark? Colours.text : Colours.dark_text
+            ),
+        ),
+        subtitle: Text('$desc',
+          style: TextStyle(
+              color: isDark? Colours.text : Colours.dark_text
+            ),
+        ),
+        trailing: Text('$status',
+          style: TextStyle(
+              color: isDark? Colours.text : Colours.dark_text
+            ),
+        ),
       ),
     );
   }

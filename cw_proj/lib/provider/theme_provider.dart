@@ -58,7 +58,7 @@ class ThemeProvider extends ChangeNotifier {
         // TextField输入文字颜色
         subhead: isDarkMode ? TextStyles.text : TextStyles.textDark,
         // Text文字样式
-        body1: isDarkMode ? TextStyles.textDark : TextStyles.text,
+        body1: isDarkMode ? TextStyles.textWhite30: TextStyles.textDark,
         subtitle: isDarkMode ? TextStyles.textDarkGray12 : TextStyles.textGray12,
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -79,6 +79,9 @@ class ThemeProvider extends ChangeNotifier {
       cupertinoOverrideTheme: CupertinoThemeData(
         brightness: isDarkMode ? Brightness.dark : Brightness.light,
       ),
+      iconTheme: IconThemeData(
+        color: isDarkMode ? Color(0xFFFFFFFF) : Color(0xFF1c1c1e),
+      )
     );
   }
 
