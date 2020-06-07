@@ -14,20 +14,63 @@ import 'package:cw_proj/widgets/forecast_hours.dart';
 import 'package:cw_proj/widgets/live_index.dart';
 import 'package:provider/provider.dart';
 
-class WeatherInfo extends StatefulWidget {
+class WeatherInfoView extends StatefulWidget {
   final HomeEntity homeEntity;
 
-  WeatherInfo({Key key, this.homeEntity}) : super(key: key);
+  WeatherInfoView({Key key, this.homeEntity}) : super(key: key);
 
   @override
   WeatherInfoState createState() => WeatherInfoState();
 }
 
-class WeatherInfoState extends State<WeatherInfo> {
+class WeatherInfoState extends State<WeatherInfoView> {
   bool isShowLoading = true;
   Loading loading = Loading();
   Random random = Random();
-  
+
+  // listView 滚动控制器 
+  ScrollController _controller = new ScrollController();
+  // 是否允许复位的标记
+  bool allowJumpTo = false;
+  // 复位高度
+  double criticalH = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    //监听滚动事件，打印滚动位置
+    _controller.addListener(() {
+      if (_controller.offset < 300 && allowJumpTo) {
+        setState(() {
+          allowJumpTo = false;
+        });
+        _controller.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+      } else if (_controller.offset >= 150 && allowJumpTo == false) {
+        setState(() {
+          allowJumpTo = true;  
+        });
+        _controller.animateTo(criticalH, duration: Duration(milliseconds: 200), curve: Curves.ease);
+      }
+    });
+ 
+    // // 获取 rootbundle
+    // AssetBundle bundle = rootBundle;
+    // // 加载天气图形
+    // _loadAssets(bundle).then((_){
+    //   setState(() {
+    //     assetsLoaded = true;
+    //     weatherWorld = new WeatherWorld();
+    //   });
+    // });   
+  }
+
+  @override
+  void dispose(){
+    _controller.dispose();
+    super.dispose();
+  }
+
+
   Widget realTimeWeather(double width, bool isDark, Condition condition, String location){
     return Padding(
       padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), ScreenUtil().setWidth(40.0), 10.0),
@@ -174,81 +217,99 @@ class WeatherInfoState extends State<WeatherInfo> {
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
     double width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    double screenHeight = size.height;
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+    double appBarHeight = AppBar().preferredSize.height;
+    criticalH = screenHeight - appBarHeight - statusBarHeight - 70;
     return Column(
       children: <Widget>[
-      Container(
-          color: Colors.transparent,
-          width: ScreenUtil.screenWidth,
-          height: ScreenUtil().setHeight(180),
-          child: HeaderContentView()
-      ),
-      SizedBox(
-        height: ScreenUtil().setHeight(10),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
-        child: InkWell(
-          child: Container(
-            decoration: BoxDecoration(
-            shape: BoxShape.rectangle, 
-            color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-                Container(
-                  height: ScreenUtil().setHeight(310),
-                  child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.homeEntity.cityName),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(10),
-                ),
-                Container(
-                  height: ScreenUtil().setHeight(420),
-                  child: bingDeskPic(width, "https://bing.ioliu.cn/v1/rand/?d=1&w=640&h=480"),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(10),
-                ),
-                Container(
-                  height: ScreenUtil().setHeight(200),
-                  child: colorTheSoulWords(widget.homeEntity.jiTang ,isDark),
-                ),
-              ],
-            ),
-          ) ,
-          onTap: (){
-            print("[weather card tap]");
-          },
-          onLongPress: (){
-            print("[weather card onLongPress]");
-          },
-          ),
-        ),
-        SizedBox(
-          height: ScreenUtil().setHeight(10),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-              30.0, 10.0, 30.0, 10.0),
-          child: Container(
-              height: 350.0,
-              width: ScreenUtil.screenWidth,
-              decoration: BoxDecoration(
-                color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(
-                    Radius.circular(8)),
-              ),
-              child: ForcastDay(weatherResult: widget.homeEntity.daily,)
-          ),
-        ),
-        ForcastHours(hours: widget.homeEntity.hour,),
-        AirQuality(aqi: widget.homeEntity.aqi,),
-        LiveIndex(live: widget.homeEntity.live),
-      ],
-    );
+        Expanded(
+          child: ListView.builder(
+            itemCount: 1,
+            controller: _controller,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  Container(
+                      color: Colors.transparent,
+                      width: ScreenUtil.screenWidth,
+                      height: ScreenUtil().setHeight(180),
+                      child: HeaderContentView()
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
+                    child: InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                        shape: BoxShape.rectangle, 
+                        color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                            Container(
+                              height: ScreenUtil().setHeight(310),
+                              child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.homeEntity.cityName),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil().setWidth(10),
+                            ),
+                            Container(
+                              height: ScreenUtil().setHeight(420),
+                              child: bingDeskPic(width, "https://bing.ioliu.cn/v1/rand/?d=1&w=640&h=480"),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil().setWidth(10),
+                            ),
+                            Container(
+                              height: ScreenUtil().setHeight(200),
+                              child: colorTheSoulWords(widget.homeEntity.jiTang ,isDark),
+                            ),
+                          ],
+                        ),
+                      ) ,
+                      onTap: (){
+                        print("[weather card tap]");
+                      },
+                      onLongPress: (){
+                        print("[weather card onLongPress]");
+                      },
+                      ),
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(10),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          30.0, 10.0, 30.0, 10.0),
+                      child: Container(
+                          height: 350.0,
+                          width: ScreenUtil.screenWidth,
+                          decoration: BoxDecoration(
+                            color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(8)),
+                          ),
+                          child: ForcastDay(weatherResult: widget.homeEntity.daily,)
+                      ),
+                    ),
+                    ForcastHours(hours: widget.homeEntity.hour,),
+                    AirQuality(aqi: widget.homeEntity.aqi,),
+                    LiveIndex(live: widget.homeEntity.live),
+                  ],
+                );
+              }
+            ) 
+          )
+        ],
+      );
+    
 
 
 

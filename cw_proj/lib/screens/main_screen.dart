@@ -50,9 +50,6 @@ class _MainScreenState extends State<MainScreen> {
   bool assetsLoaded = false;
   WeatherWorld weatherWorld;
   AppBar _appBar;
-  ScrollController _controller = new ScrollController();
-  bool allowJumpTo = false;
-  double criticalH = 0.0;
 
   HomeBean get _locations => Global.locations;
   Map<String, HomeEntity> cityWeatherHash = Map<String, HomeEntity>();
@@ -91,21 +88,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    //监听滚动事件，打印滚动位置
-    _controller.addListener(() {
-      if (_controller.offset < 300 && allowJumpTo) {
-        setState(() {
-          allowJumpTo = false;
-        });
-        _controller.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
-      } else if (_controller.offset >= 150 && allowJumpTo == false) {
-        setState(() {
-          allowJumpTo = true;  
-        });
-        _controller.animateTo(criticalH, duration: Duration(milliseconds: 200), curve: Curves.ease);
-      }
-    });
- 
     // // 获取 rootbundle
     // AssetBundle bundle = rootBundle;
     // // 加载天气图形
@@ -161,10 +143,8 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-
   @override
   void dispose(){
-    _controller.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -191,8 +171,6 @@ class _MainScreenState extends State<MainScreen> {
     _appBar = createNaviBar();
     double appBarHeight = _appBar.preferredSize.height;
 
-    criticalH = screenHeight - appBarHeight - statusBarHeight - 20;
-
     return Scaffold(
         appBar: _appBar,
         body: Builder(builder: (context){
@@ -205,25 +183,15 @@ class _MainScreenState extends State<MainScreen> {
               children: <Widget>[
                 // SpriteWidget(weatherWorld),
                 Scrollbar(
-                    child: ListView.builder(
-                        itemCount: 1,
-                        controller: _controller,
-                        itemBuilder: (context, index) {
-                          return  Container(
-                              color: Colors.transparent,
-                              width: ScreenUtil.screenWidth,
-                              height: ScreenUtil().setHeight(4200),
-                              child: PageView.builder(
-                                onPageChanged: onPageChanged,
-                                controller: _pageController,
-                                itemBuilder: (context, index) {
-                                  HomeEntity entity = weatherArray[index];
-                                  return WeatherInfo(homeEntity: entity);
-                                },
-                                itemCount: weatherArray.length,
-                              ));
-                        }
-                    )
+                  child: PageView.builder(
+                    onPageChanged: onPageChanged,
+                    controller: _pageController,
+                    itemBuilder: (context, index) {
+                      HomeEntity entity = weatherArray[index];
+                      return WeatherInfoView(homeEntity: entity);
+                    },
+                    itemCount: weatherArray.length,
+                  )
                 )
               ],
             );

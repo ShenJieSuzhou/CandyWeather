@@ -58,7 +58,7 @@ class ThemeProvider extends ChangeNotifier {
         // TextField输入文字颜色
         subhead: isDarkMode ? TextStyles.text : TextStyles.textDark,
         // Text文字样式
-        body1: isDarkMode ? TextStyles.textWhite30: TextStyles.textDark,
+        body1: isDarkMode ? TextStyles.textWhite14: TextStyles.textDark,
         subtitle: isDarkMode ? TextStyles.textDarkGray12 : TextStyles.textGray12,
       ),
       inputDecorationTheme: InputDecorationTheme(
