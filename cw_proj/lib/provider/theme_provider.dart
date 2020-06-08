@@ -56,10 +56,10 @@ class ThemeProvider extends ChangeNotifier {
       textSelectionHandleColor: Colours.app_main,
       textTheme: TextTheme(
         // TextField输入文字颜色
-        subhead: isDarkMode ? TextStyles.text : TextStyles.textDark,
+        subhead: isDarkMode ? TextStyles.textWhite14 : TextStyles.textDark,
         // Text文字样式
         body1: isDarkMode ? TextStyles.textWhite14: TextStyles.textDark,
-        subtitle: isDarkMode ? TextStyles.textDarkGray12 : TextStyles.textGray12,
+        subtitle: isDarkMode ? TextStyles.textWhite14 : TextStyles.textDarkGray14,
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: isDarkMode ? TextStyles.textHint14 : TextStyles.textDarkGray14,
@@ -81,7 +81,7 @@ class ThemeProvider extends ChangeNotifier {
       ),
       iconTheme: IconThemeData(
         color: isDarkMode ? Color(0xFFFFFFFF) : Color(0xFF1c1c1e),
-      )
+      ),
     );
   }
 
