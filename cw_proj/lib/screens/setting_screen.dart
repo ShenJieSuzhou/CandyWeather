@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:cw_proj/screens/dynamicbg_screen.dart';
 import 'package:cw_proj/screens/desktool_screen.dart';
@@ -34,6 +35,10 @@ class _SettingScreenState extends State<SettingScreen> {
     {'name':['通知','推送','语言','单位'], 'group': '通用设置', 'icon':'general'},
     {'name': ['联系我们','评价','推荐'], 'group': '关于', 'icon':'aboutus'},
   ];
+
+  // 创建一个给native的channel (类似iOS的通知）
+  static const methodChannel = const MethodChannel('com.jj.platinum');
+  String _nativeCallBackValue = '等待原生传值';
 
   @override
   Widget build(BuildContext context) {
@@ -257,5 +262,17 @@ class _SettingScreenState extends State<SettingScreen> {
           );
         }
     ));
+  }
+
+  // 与原生交互
+  Future<void> _communicateFunction(flutterPara) async {
+    try {
+      //原生方法名为callNativeMethond,flutterPara为flutter调用原生方法传入的参数，await等待方法执行
+      final result = await methodChannel.invokeMethod('callNativeMethond', flutterPara);
+      //如果原生方法执行回调传值给flutter，那下面的代码才会被执行
+      _nativeCallBackValue = result;
+    } on PlatformException catch (e) {//抛出异常
+      print(e);
+    }
   }
 }
