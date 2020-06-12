@@ -8,7 +8,7 @@ import 'package:cw_proj/screens/units_screen.dart';
 import 'package:cw_proj/screens/contactus_screen.dart';
 import 'package:cw_proj/screens/push_screen.dart';
 import 'package:cw_proj/screens/position_screen.dart';
-
+import 'package:cw_proj/util/log_util.dart';
 
 enum SettingItem{
   SETTING_WIDGET,
@@ -240,6 +240,8 @@ class _SettingScreenState extends State<SettingScreen> {
       case SettingItem.SETTING_COMMENTS:
       break;
       case SettingItem.SETTING_RECOMMEND:
+      Log.e("给原生传值");
+      _communicateFunction("hello fultter");
       break;
       default:
     }
