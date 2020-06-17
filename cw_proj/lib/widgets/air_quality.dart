@@ -30,11 +30,9 @@ class AirQualityState extends State<AirQuality> {
     }
 
     double screenW = MediaQuery.of(context).size.width;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      child: Container(
-        height:(screenW-40)/3*4, 
-        width:screenW,
+    return Container(
+        height:(screenW - 50)/3*4, 
+        width:screenW - 50,
         child: GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -116,8 +114,7 @@ class AirQualityState extends State<AirQuality> {
             );
           },
       ),
-      ),
-    );
+      );
   }
 
   Widget cube(String title, String extend, String value){

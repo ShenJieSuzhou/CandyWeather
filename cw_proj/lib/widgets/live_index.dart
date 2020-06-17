@@ -18,7 +18,7 @@ class LiveIndexState extends State<LiveIndex> {
     // double screenH = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
       child: Container(
         child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),

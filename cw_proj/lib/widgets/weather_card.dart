@@ -299,11 +299,17 @@ class WeatherInfoState extends State<WeatherInfoView> {
                           child: ForcastDay(weatherResult: widget.homeEntity.daily,)
                       ),
                     ),
-                     SizedBox(
+                    SizedBox(
                       height: ScreenUtil().setHeight(20),
                     ),
                     ForcastHours(hours: widget.homeEntity.hour,),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                    ),
                     AirQuality(aqi: widget.homeEntity.aqi,),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                    ),
                     LiveIndex(live: widget.homeEntity.live),
                   ],
                 );
