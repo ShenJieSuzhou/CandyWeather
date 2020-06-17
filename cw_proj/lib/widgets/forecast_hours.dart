@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cw_proj/Model/hours.dart';
 import 'package:cw_proj/util/theme_utils.dart';
+import 'package:cw_proj/res/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ForcastHours extends StatefulWidget {
   final Hours hours;
@@ -29,25 +31,35 @@ class ForcastHoursState extends State<ForcastHours> {
     }
 
     return Container(
-      height: 150,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: widgetlist,
+            width: MediaQuery.of(context).size.width - 60,
+            decoration: BoxDecoration(
+              color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
-          ),
-        )
-      ),
-    );
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width - 60,
+                  child: Text('24小时预报',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(30),
+                      color: isDark? Colours.text : Colours.dark_text
+                    )
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.all(0),
+                  child: Row(
+                    children: widgetlist,
+                  ),
+                ),
+              ],
+            ),
+      );
   }
 
   //小时天气的item
@@ -56,7 +68,7 @@ Widget _getHourItem(Hourly hourly) {
     height: 130,
     width: 60,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
