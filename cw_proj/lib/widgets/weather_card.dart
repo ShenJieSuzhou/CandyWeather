@@ -288,7 +288,7 @@ class WeatherInfoState extends State<WeatherInfoView> {
                       padding: EdgeInsets.fromLTRB(
                           30.0, 10.0, 30.0, 10.0),
                       child: Container(
-                          height: 350.0,
+                          height: 400.0,
                           width: ScreenUtil.screenWidth,
                           decoration: BoxDecoration(
                             color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),

@@ -6,6 +6,9 @@ import 'package:cw_proj/util/time_util.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
+import 'package:cw_proj/res/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cw_proj/util/theme_utils.dart';
 
 class ForcastDay extends StatefulWidget {
   final Daily weatherResult;
@@ -41,10 +44,26 @@ class ForcastDayState extends State<ForcastDay> {
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
     double itemWidth = (screenW - 60) / 7;
+    bool isDark = ThemeUtils.isDark(context);
     if(imageLoaded){
-      return CustomPaint(
-        painter: _futureWeatherPainter(dailys, dayIcons, nightIcons, itemWidth),
-        size: Size(screenW - 60, 350),
+      return Column(
+        children: <Widget>[
+          Container(
+            width: screenW - 60,
+            padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+            child: Text('5天天气预报',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(30),
+                color: isDark? Colours.text : Colours.dark_text
+              )
+            ),
+          ),
+          CustomPaint(
+            painter: _futureWeatherPainter(dailys, dayIcons, nightIcons, itemWidth),
+            size: Size(screenW - 60, 350),
+          ),
+        ],
       );
     }else{
       return Container(
@@ -132,7 +151,7 @@ class _futureWeatherPainter extends CustomPainter {
   final List<ui.Image> dayIcons;
   final List<ui.Image> nightIcons;
   final double itemWidth;
-  final double textHeight = 140;
+  final double textHeight = 130;
   final double temHeight = 80;
   int maxTem, minTem;
 
@@ -197,24 +216,24 @@ class _futureWeatherPainter extends CustomPainter {
 
       var date;
       if(i == 0){
-        date = daily.predictDate + "\n" + "今天";
+        date = "今天";
       }else if(i == 1){
-        date = daily.predictDate + "\n" + "明天";
+        date = "明天";
       }else{
-        date = daily.predictDate + "\n" + TimeUtil.getWeatherDate(daily.predictDate);
+        date = TimeUtil.getWeatherDate(daily.predictDate);
       }
       //绘制日期
-      drawText(canvas, i, date ,15, fontSize: 12);
+      drawText(canvas, i, date ,10, fontSize: 14);
       //绘制白天天气
-      canvas.drawImageRect(dayIcons[i],Rect.fromLTWH(0, 0, dayIcons[i].width.toDouble(), dayIcons[i].height.toDouble()),
-          Rect.fromLTWH(itemWidth/4 + itemWidth*i, 55, itemWidth/2, itemWidth/2),linePaint);
-      drawText(canvas, i, daily.conditionDay, 90, fontSize: 12);
+      canvas.drawImageRect(dayIcons[i], Rect.fromLTWH(0, 0, dayIcons[i].width.toDouble(), dayIcons[i].height.toDouble()),
+          Rect.fromLTWH(itemWidth/4 + itemWidth*i, 40, itemWidth/2+5, itemWidth/2+5),linePaint);
+      drawText(canvas, i, daily.conditionDay, 85, fontSize: 13);
       //绘制夜间天气
-      canvas.drawImageRect(nightIcons[i],Rect.fromLTWH(0, 0, nightIcons[i].width.toDouble(),  nightIcons[i].height.toDouble()),
-          Rect.fromLTWH(itemWidth/4 + itemWidth*i, textHeight + temHeight + 25, itemWidth/2, itemWidth/2),new Paint());
-      drawText(canvas, i, daily.conditionNight, textHeight+temHeight + 60, fontSize: 12);
+      canvas.drawImageRect(nightIcons[i],Rect.fromLTWH(0, 0, nightIcons[i].width.toDouble(), nightIcons[i].height.toDouble()),
+          Rect.fromLTWH(itemWidth/4 + itemWidth*i, textHeight + temHeight + 30, itemWidth/2+5, itemWidth/2+5),new Paint());
+      drawText(canvas, i, daily.conditionNight, textHeight+temHeight + 75, fontSize: 13);
       // 绘制风向风力
-      drawText(canvas, i, daily.windDirNight + "\n" + daily.windLevelNight, textHeight+temHeight + 85,fontSize: 10);
+      drawText(canvas, i, daily.windDirNight + "\n" + daily.windLevelNight, textHeight+temHeight + 105,fontSize: 12);
     }
     canvas.drawPath(maxPath, maxPaint);
     canvas.drawPath(minPath, minPaint);
