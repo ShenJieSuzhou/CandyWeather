@@ -221,7 +221,7 @@ class WeatherInfoState extends State<WeatherInfoView> {
     double screenHeight = size.height;
     double statusBarHeight = MediaQuery.of(context).padding.top;
     double appBarHeight = AppBar().preferredSize.height;
-    criticalH = screenHeight - appBarHeight - statusBarHeight - 70;
+    criticalH = screenHeight - appBarHeight - statusBarHeight - 50;
     return Column(
       children: <Widget>[
         Expanded(
@@ -282,7 +282,7 @@ class WeatherInfoState extends State<WeatherInfoView> {
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(10),
+                      height: ScreenUtil().setHeight(40),
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(
