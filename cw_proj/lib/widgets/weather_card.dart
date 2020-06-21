@@ -1,8 +1,10 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cw_proj/Model/home_entity.dart';
 import 'package:cw_proj/res/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cw_proj/util/theme_utils.dart';
 import 'package:cw_proj/Model/condition.dart';
@@ -13,6 +15,7 @@ import 'package:cw_proj/widgets/forecast_day.dart';
 import 'package:cw_proj/widgets/forecast_hours.dart';
 import 'package:cw_proj/widgets/live_index.dart';
 import 'package:provider/provider.dart';
+import 'dart:ui' as ui;
 
 class WeatherInfoView extends StatefulWidget {
   final HomeEntity homeEntity;
@@ -213,6 +216,17 @@ class WeatherInfoState extends State<WeatherInfoView> {
     );
   }
 
+  // 截图boundary，并且返回图片的二进制数据。
+  Future<Uint8List> _capturePng(GlobalKey globalKey) async {
+    RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage();
+    // 注意：png是压缩后格式，如果需要图片的原始像素数据，请使用rawRgba
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    return pngBytes;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     bool isDark = ThemeUtils.isDark(context);
@@ -222,6 +236,8 @@ class WeatherInfoState extends State<WeatherInfoView> {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     double appBarHeight = AppBar().preferredSize.height;
     criticalH = screenHeight - appBarHeight - statusBarHeight - 50;
+
+    GlobalKey globalKey = new GlobalKey();
     return Column(
       children: <Widget>[
         Expanded(
@@ -240,7 +256,9 @@ class WeatherInfoState extends State<WeatherInfoView> {
                   SizedBox(
                     height: ScreenUtil().setHeight(10),
                   ),
-                  Padding(
+                  RepaintBoundary(
+                    key: globalKey,
+                    child: Padding(
                     padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
                     child: InkWell(
                       child: Container(
@@ -275,12 +293,69 @@ class WeatherInfoState extends State<WeatherInfoView> {
                       ) ,
                       onTap: (){
                         print("[weather card tap]");
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) => AlertDialog(
+                        //         title: Text('Dialog'),
+                        //         content: Text(('Dialog content..')),
+                        //         actions: <Widget>[
+                        //           new FlatButton(
+                        //             child: new Text("取消"),
+                        //             onPressed: () {
+                        //               Navigator.of(context).pop();
+                        //             },
+                        //           ),
+                        //           new FlatButton(
+                        //             child: new Text("确定"),
+                        //             onPressed: () {
+                        //               Navigator.of(context).pop();
+                        //             },
+                        //           ),
+                        //         ],
+                        //       ));
                       },
-                      onLongPress: (){
-                        print("[weather card onLongPress]");
+                      onLongPress: () {
+                        print("[weather card tap]");
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text('Dialog'),
+                                content: Text(('Dialog content..')),
+                                actions: <Widget>[
+                                  new FlatButton(
+                                    child: new Text("取消"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  new FlatButton(
+                                    child: new Text("确定"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ));
+                        // Uint8List imgByte = await _capturePng(globalKey);
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (_) {
+                        //     return Padding(
+                        //         padding: EdgeInsets.all(16),
+                        //         child: Container(
+                        //           child: Text('Custom Dialog',
+                        //                   style: TextStyle(
+                        //                     fontSize: 16,
+                        //                     decoration: TextDecoration.none),
+                        //             ),
+                        //         ),
+                        //     );
+                        //   }
+                        // );
                       },
                       ),
                     ),
+                  ),
                     SizedBox(
                       height: ScreenUtil().setHeight(40),
                     ),
