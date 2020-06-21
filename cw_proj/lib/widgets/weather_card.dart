@@ -218,11 +218,33 @@ class WeatherInfoState extends State<WeatherInfoView> {
 
   // 截图boundary，并且返回图片的二进制数据。
   Future<Uint8List> _capturePng(GlobalKey globalKey) async {
+    print("call the capturePng");
     RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
     ui.Image image = await boundary.toImage();
     // 注意：png是压缩后格式，如果需要图片的原始像素数据，请使用rawRgba
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Dialog'),
+            content: Image.memory(pngBytes),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("取消"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text("确定"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ));
     return pngBytes;
   }
 
@@ -293,49 +315,12 @@ class WeatherInfoState extends State<WeatherInfoView> {
                       ) ,
                       onTap: (){
                         print("[weather card tap]");
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (context) => AlertDialog(
-                        //         title: Text('Dialog'),
-                        //         content: Text(('Dialog content..')),
-                        //         actions: <Widget>[
-                        //           new FlatButton(
-                        //             child: new Text("取消"),
-                        //             onPressed: () {
-                        //               Navigator.of(context).pop();
-                        //             },
-                        //           ),
-                        //           new FlatButton(
-                        //             child: new Text("确定"),
-                        //             onPressed: () {
-                        //               Navigator.of(context).pop();
-                        //             },
-                        //           ),
-                        //         ],
-                        //       ));
                       },
                       onLongPress: () {
                         print("[weather card tap]");
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: Text('Dialog'),
-                                content: Text(('Dialog content..')),
-                                actions: <Widget>[
-                                  new FlatButton(
-                                    child: new Text("取消"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  new FlatButton(
-                                    child: new Text("确定"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              ));
+                        _capturePng(globalKey);
+
+                        
                         // Uint8List imgByte = await _capturePng(globalKey);
                         // showDialog(
                         //   context: context,
