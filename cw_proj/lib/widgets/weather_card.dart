@@ -216,38 +216,108 @@ class WeatherInfoState extends State<WeatherInfoView> {
     );
   }
 
-  // 截图boundary，并且返回图片的二进制数据。
-  Future<Uint8List> _capturePng(GlobalKey globalKey) async {
-    print("call the capturePng");
+  // 弹出分享视图
+  void showShareView(GlobalKey globalKey) async {
     RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
     ui.Image image = await boundary.toImage();
     // 注意：png是压缩后格式，如果需要图片的原始像素数据，请使用rawRgba
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
 
+    // 弹出对话框
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-            title: Text('Dialog'),
-            content: Image.memory(pngBytes),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text("取消"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              new FlatButton(
-                child: new Text("确定"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ));
-    return pngBytes;
+      builder: (_) {
+        var child = GestureDetector(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width * 3/2 ,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Image.memory(pngBytes),
+                ),
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: (){
+
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: (){
+                        
+                      },
+                    )
+                  ],
+                )
+              ],
+            )
+          ),
+          onVerticalDragUpdate: (_) {
+            //关闭对话框
+            Navigator.of(context).pop(true); 
+          },
+        );
+        
+        return Dialog(child: child,
+         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),);
+      }
+    );
   }
 
+  // 首页主视图
+  Widget desktopView(double width, bool isDark){
+    GlobalKey globalKey = new GlobalKey();
+    return RepaintBoundary(
+      key: globalKey,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
+      child: InkWell(
+        child: Container(
+          decoration: BoxDecoration(
+          shape: BoxShape.rectangle, 
+          color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+              Container(
+                height: ScreenUtil().setHeight(310),
+                child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.homeEntity.cityName),
+              ),
+              SizedBox(
+                height: ScreenUtil().setWidth(10),
+              ),
+              Container(
+                height: ScreenUtil().setHeight(420),
+                child: bingDeskPic(width, "https://bing.ioliu.cn/v1/rand/?d=1&w=640&h=480"),
+              ),
+              SizedBox(
+                height: ScreenUtil().setWidth(10),
+              ),
+              Container(
+                height: ScreenUtil().setHeight(200),
+                child: colorTheSoulWords(widget.homeEntity.jiTang ,isDark),
+              ),
+            ],
+          ),
+        ) ,
+        onTap: (){
+          print("[weather card tap]");
+          showShareView(globalKey);
+        },
+        onLongPress: () {
+          // print("[weather card tap]");
+        },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +329,6 @@ class WeatherInfoState extends State<WeatherInfoView> {
     double appBarHeight = AppBar().preferredSize.height;
     criticalH = screenHeight - appBarHeight - statusBarHeight - 50;
 
-    GlobalKey globalKey = new GlobalKey();
     return Column(
       children: <Widget>[
         Expanded(
@@ -269,78 +338,16 @@ class WeatherInfoState extends State<WeatherInfoView> {
             itemBuilder: (context, index) {
               return Column(
                 children: <Widget>[
-                  Container(
-                      color: Colors.transparent,
-                      width: ScreenUtil.screenWidth,
-                      height: ScreenUtil().setHeight(180),
-                      child: HeaderContentView()
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(10),
-                  ),
-                  RepaintBoundary(
-                    key: globalKey,
-                    child: Padding(
-                    padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, ScreenUtil().setWidth(60), 0),
-                    child: InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                        shape: BoxShape.rectangle, 
-                        color: isDark?Color(0xFFf5f5f5) : Color(0xFF1c1c1e),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                            Container(
-                              height: ScreenUtil().setHeight(310),
-                              child: realTimeWeather(width, isDark, widget.homeEntity.condition, widget.homeEntity.cityName),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(10),
-                            ),
-                            Container(
-                              height: ScreenUtil().setHeight(420),
-                              child: bingDeskPic(width, "https://bing.ioliu.cn/v1/rand/?d=1&w=640&h=480"),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(10),
-                            ),
-                            Container(
-                              height: ScreenUtil().setHeight(200),
-                              child: colorTheSoulWords(widget.homeEntity.jiTang ,isDark),
-                            ),
-                          ],
-                        ),
-                      ) ,
-                      onTap: (){
-                        print("[weather card tap]");
-                      },
-                      onLongPress: () {
-                        print("[weather card tap]");
-                        _capturePng(globalKey);
-
-                        
-                        // Uint8List imgByte = await _capturePng(globalKey);
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (_) {
-                        //     return Padding(
-                        //         padding: EdgeInsets.all(16),
-                        //         child: Container(
-                        //           child: Text('Custom Dialog',
-                        //                   style: TextStyle(
-                        //                     fontSize: 16,
-                        //                     decoration: TextDecoration.none),
-                        //             ),
-                        //         ),
-                        //     );
-                        //   }
-                        // );
-                      },
-                      ),
+                    Container(
+                        color: Colors.transparent,
+                        width: ScreenUtil.screenWidth,
+                        height: ScreenUtil().setHeight(180),
+                        child: HeaderContentView()
                     ),
-                  ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(10),
+                    ),
+                    desktopView(width, isDark),
                     SizedBox(
                       height: ScreenUtil().setHeight(40),
                     ),
