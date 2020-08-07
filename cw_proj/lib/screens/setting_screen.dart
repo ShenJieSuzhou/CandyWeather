@@ -9,6 +9,7 @@ import 'package:cw_proj/screens/contactus_screen.dart';
 import 'package:cw_proj/screens/push_screen.dart';
 import 'package:cw_proj/screens/position_screen.dart';
 import 'package:cw_proj/util/log_util.dart';
+import 'package:cw_proj/util/theme_utils.dart';
 
 enum SettingItem{
   SETTING_WIDGET,
@@ -42,6 +43,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = ThemeUtils.isDark(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -51,14 +53,14 @@ class _SettingScreenState extends State<SettingScreen> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("设置"),
+        title: Text("设置", style: TextStyle(color: isDark? Colors.white : Colors.black),),
       ),
-      body: settingListGroupView(),
+      body: settingListGroupView(isDark),
     );
   }
 
 
-  Widget settingListGroupView(){
+  Widget settingListGroupView(bool isDark){
     return GroupedListView<dynamic, String>(
       groupBy: (element) => element['group'],
       elements: _elements,
@@ -73,7 +75,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 SizedBox(width: 10.0,),
                 Text(
                   value,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: isDark? Colors.white : Colors.black),
                 )
               ],
             )
@@ -87,7 +89,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 SizedBox(width: 10.0,),
                 Text(
                   value,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: isDark? Colors.white : Colors.black),
                 )
               ],
             )
@@ -101,7 +103,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   SizedBox(width: 10.0,),
                   Text(
                     value,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: isDark? Colors.white : Colors.black),
                   )
                 ],
               )
@@ -118,7 +120,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text('自定义桌面Widget小工具'),
+                      title: Text('自定义桌面Widget小工具', style: TextStyle(color: isDark? Colors.white : Colors.black),),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_WIDGET);
@@ -134,7 +136,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text('天气背景'),
+                      title: Text('天气背景', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_BACKGROUND);
@@ -150,7 +152,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     // ),
                     // Divider(height: 1.0,),
                     ListTile(
-                      title: Text('通知'),
+                      title: Text('通知', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_PUSH);
@@ -158,7 +160,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     Divider(height: 1.0,),
                     ListTile(
-                      title: Text('语言'),
+                      title: Text('语言', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_LANGUAGE);
@@ -166,7 +168,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     Divider(height: 1.0,),
                     ListTile(
-                      title: Text('单位'),
+                      title: Text('单位', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_UNITS);
@@ -182,7 +184,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text('联系我们'),
+                      title: Text('联系我们', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_CONTACTUS);
@@ -190,7 +192,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     Divider(height: 1.0,),
                     ListTile(
-                      title: Text('评价'),
+                      title: Text('评价', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_COMMENTS);
@@ -198,7 +200,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     Divider(height: 1.0,),
                     ListTile(
-                      title: Text('推荐'),
+                      title: Text('推荐', style: TextStyle(color: isDark? Colors.white : Colors.black)),
                       trailing: Icon(Icons.arrow_forward_ios),
                       onTap: (){
                         onTapEvent(SettingItem.SETTING_RECOMMEND);

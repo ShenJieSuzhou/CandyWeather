@@ -46,7 +46,6 @@ class ForcastHoursState extends State<ForcastHours> {
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),
-                      color: isDark? Colours.text : Colours.dark_text
                     )
                   ),
                 ),
@@ -73,7 +72,7 @@ Widget _getHourItem(Hourly hourly) {
       children: <Widget>[
         Text(
           hourly.hour + ":00",
-          style: TextStyle(color: Colors.black, fontSize: 12),
+          style: TextStyle(fontSize: 12),
         ),
         SizedBox(
           height: 20,
@@ -88,7 +87,7 @@ Widget _getHourItem(Hourly hourly) {
         ),
         Text(
           hourly.temp + "℃",
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          style: TextStyle(fontSize: 16),
         ),
       ],
     ),

@@ -55,7 +55,6 @@ class ForcastDayState extends State<ForcastDay> {
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
-                color: isDark? Colours.text : Colours.dark_text
               )
             ),
           ),
@@ -146,7 +145,7 @@ class ForcastDayState extends State<ForcastDay> {
 }
 
 class _futureWeatherPainter extends CustomPainter {
-  _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth, );
+  _futureWeatherPainter(this.dailys, this.dayIcons, this.nightIcons, this.itemWidth,);
   final List<Forecast> dailys;
   final List<ui.Image> dayIcons;
   final List<ui.Image> nightIcons;
@@ -162,7 +161,7 @@ class _futureWeatherPainter extends CustomPainter {
     var maxPaint = new Paint()
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..color = Color(0xff1c1c1e)
+      ..color = Color(0xffb6b6b6)
       ..isAntiAlias = true
       ..strokeWidth = 2;
 
@@ -265,8 +264,9 @@ class _futureWeatherPainter extends CustomPainter {
       textAlign: TextAlign.center,//居中
       fontSize: fontSize == null ?14:fontSize,//大小
     ));
+
     //文字颜色
-    pb.pushStyle(ui.TextStyle(color: Colors.black));
+    // pb.pushStyle(ui.TextStyle(color: isDark? Colours.text : Colours.dark_text));
     //添加文字
     pb.addText(text);
     //文本宽度

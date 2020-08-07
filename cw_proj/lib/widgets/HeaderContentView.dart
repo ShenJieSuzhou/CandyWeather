@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cw_proj/res/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cw_proj/util/theme_utils.dart';
 
 class HeaderContentView extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class HeaderContentView extends StatefulWidget {
 class _HeaderContentViewState extends State<HeaderContentView> {
   @override
   Widget build(BuildContext context) {
+    bool isDark = ThemeUtils.isDark(context);
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +21,7 @@ class _HeaderContentViewState extends State<HeaderContentView> {
             padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), ScreenUtil().setWidth(30), 0, 5),
             child: Text("2020年2月17日 星期一", 
             style: TextStyle(
-                      // color: Colors.black,
+                      color: isDark ? Colors.white : Colors.black,
                       fontSize: ScreenUtil().setSp(35),
                     ),
             textAlign: TextAlign.start,),
@@ -29,7 +31,7 @@ class _HeaderContentViewState extends State<HeaderContentView> {
             padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(60), 0, 0, 5),
             child: Text("Today",
             style: TextStyle(
-                      // color: Colors.black,
+                      color: isDark ? Colors.white : Colors.black,
                       fontSize: ScreenUtil().setSp(80),
                       fontWeight: FontWeight.bold
                     ),
